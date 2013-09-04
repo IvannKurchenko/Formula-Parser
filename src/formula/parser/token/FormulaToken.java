@@ -18,8 +18,8 @@ public class FormulaToken {
     }
 
     /**
-     * Return element associated to this token.
-     * @return element associated to this token.
+     * Return {@link FormulaItem} associated to this token.
+     * @return {@link FormulaItem} associated to this token.
      */
     public FormulaItem getItem(){
         return item;
