@@ -5,7 +5,7 @@ package formula.parser.operation;
  */
 public enum BinaryOperations implements BinaryOperation {
 
-    ADDITION (0, "+"){
+    ADDITION(0, "+") {
         @Override
         public double operate(double firstArgument, double secondArgument) {
             return firstArgument + secondArgument;
@@ -19,21 +19,21 @@ public enum BinaryOperations implements BinaryOperation {
         }
     },
 
-    DIVISION (1, "/"){
+    DIVISION(1, "/") {
         @Override
         public double operate(double firstArgument, double secondArgument) {
             return firstArgument / secondArgument;
         }
     },
 
-    MULTIPLY (1, "*") {
+    MULTIPLY(1, "*") {
         @Override
         public double operate(double firstArgument, double secondArgument) {
             return firstArgument * secondArgument;
         }
     },
 
-    POWER (1,"^"){
+    POWER(1, "^") {
         @Override
         public double operate(double firstArgument, double secondArgument) {
             return Math.pow(firstArgument, secondArgument);
@@ -43,13 +43,13 @@ public enum BinaryOperations implements BinaryOperation {
     private int priority;
     private String[] sings;
 
-    BinaryOperations(int priority, String... sings){
+    BinaryOperations(int priority, String... sings) {
         this.priority = priority;
         this.sings = sings;
     }
 
     @Override
-    public Type getType(){
+    public Type getType() {
         return Type.BINARY;
     }
 

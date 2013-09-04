@@ -9,7 +9,7 @@ interface FormulaTokenChecker {
      * Check next {@link FormulaToken} in incoming string from start position.
      * If specific {@link FormulaToken} presents return it's, 'null' otherwise.
      *
-     * @param formula formula in string presentation.
+     * @param formula       formula in string presentation.
      * @param startPosition start position of {@link FormulaToken} checking in incoming string.
      * @return specific {@link FormulaToken} implementation.
      */

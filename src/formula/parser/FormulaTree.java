@@ -238,12 +238,12 @@ class FormulaTree implements Formula {
     }
 
     private double calculate(Node node, Map<Character, Double> arguments) {
-        switch (node.getFormulaItem().getType()){
+        switch (node.getFormulaItem().getType()) {
 
             case OPERATION:
                 return calculateOperation(node, arguments);
 
-            case DIGIT_LITERAL :
+            case DIGIT_LITERAL:
                 return getLiteralValue(node);
 
             case VARIABLE:
@@ -258,7 +258,7 @@ class FormulaTree implements Formula {
         }
     }
 
-    private double calculateOperation(Node node, Map<Character, Double> arguments){
+    private double calculateOperation(Node node, Map<Character, Double> arguments) {
         if (node.getFormulaItem().isBinaryOperation()) {
 
             BinaryOperation binaryOperation = (BinaryOperation) node.getFormulaItem().getOperation();

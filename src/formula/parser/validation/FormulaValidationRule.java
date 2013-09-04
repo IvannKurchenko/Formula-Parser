@@ -9,6 +9,7 @@ public interface FormulaValidationRule {
 
     /**
      * Check formula for some correctness rule.
+     *
      * @param formulaItems formula in split presentation.
      * @throws FormulaValidationException if formula not correspond to this rule.
      */

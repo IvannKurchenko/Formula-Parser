@@ -52,46 +52,50 @@ public class FormulaItem {
 
     /**
      * Constructs new {@link FormulaItem} that represents given {@link Operation}.
+     *
      * @param operation formula operation.
      * @return new {@link FormulaItem} that represents given {@link Operation}.
      * @see Type#OPERATION
      */
-    public static FormulaItem newOperationItem(Operation operation){
+    public static FormulaItem newOperationItem(Operation operation) {
         return new FormulaItem(operation);
     }
 
     /**
      * Constructs new {@link FormulaItem} that represents digit literal with given value.
+     *
      * @param digitValue value of digit literal
      * @return new {@link FormulaItem} that represents digit literal
      * @see Type#DIGIT_LITERAL
      */
-    public static FormulaItem newDigitLiteralItem(double digitValue){
+    public static FormulaItem newDigitLiteralItem(double digitValue) {
         return new FormulaItem(digitValue);
     }
 
     /**
      * Constructs new {@link FormulaItem} that represents variable with given name
+     *
      * @param variableName name of variable.
      * @return new {@link FormulaItem} that represents variable
      * @see Type#VARIABLE
      */
-    public static FormulaItem newVariableItem(char variableName){
+    public static FormulaItem newVariableItem(char variableName) {
         return new FormulaItem(variableName);
     }
 
     /**
      * Constructs new {@link FormulaItem} that represents open or close bracket depend on given parameter.
+     *
      * @param openBracket 'true' value represent open bracket - '(' and 'false' - close bracket - ')'
-     * @return  new {@link FormulaItem} that represents open or close bracket.
+     * @return new {@link FormulaItem} that represents open or close bracket.
      * @see Type#OPEN_BRACKET
      * @see Type#CLOSE_BRACKET
      */
-    public static FormulaItem newBracketItem(boolean openBracket){
+    public static FormulaItem newBracketItem(boolean openBracket) {
         return new FormulaItem(openBracket);
     }
 
-    private FormulaItem(Operation operation){
+    private FormulaItem(Operation operation) {
         type = Type.OPERATION;
         priority = operation.getPriority();
         this.operation = operation;
@@ -100,7 +104,7 @@ public class FormulaItem {
         variableName = VARIABLE_NO_NAME;
     }
 
-    private FormulaItem(double literalValue){
+    private FormulaItem(double literalValue) {
         type = Type.DIGIT_LITERAL;
         priority = MAXIMUM_PRIORITY;
         this.literalValue = literalValue;
@@ -109,7 +113,7 @@ public class FormulaItem {
         variableName = VARIABLE_NO_NAME;
     }
 
-    private FormulaItem(char variableName){
+    private FormulaItem(char variableName) {
         type = Type.VARIABLE;
         priority = MAXIMUM_PRIORITY;
         this.variableName = variableName;
@@ -118,10 +122,8 @@ public class FormulaItem {
         literalValue = LITERAL_NO_VALUE;
     }
 
-    private FormulaItem(boolean openBracket){
-        type = openBracket? Type.OPEN_BRACKET :
-                            Type.CLOSE_BRACKET;
-
+    private FormulaItem(boolean openBracket) {
+        type = openBracket ? Type.OPEN_BRACKET : Type.CLOSE_BRACKET;
         priority = NO_PRIORITY;
         operation = null;
         variableName = VARIABLE_NO_NAME;
@@ -131,10 +133,11 @@ public class FormulaItem {
     /**
      * Return operation that item represents or 'null' if item is not operation.
      * Supported for {@link Type#OPERATION}.
+     *
      * @return operation that item represents.
      * @see FormulaItem#getType()
      */
-    public Operation getOperation(){
+    public Operation getOperation() {
         return operation;
     }
 
@@ -142,10 +145,11 @@ public class FormulaItem {
      * Return value of literal digit that item represents or
      * {@link FormulaItem#LITERAL_NO_VALUE} if item is not operation.
      * Supported for {@link Type#DIGIT_LITERAL}
+     *
      * @return value of digit literal.
      * @see FormulaItem#getType()
      */
-    public double getDigitLiteralValue(){
+    public double getDigitLiteralValue() {
         return literalValue;
     }
 
@@ -153,10 +157,11 @@ public class FormulaItem {
      * Return variable name that item represents or
      * {@link FormulaItem#VARIABLE_NO_NAME} if item is not operation.
      * Supported for {@link Type#VARIABLE_NO_NAME}.
+     *
      * @return variable name that item represents
      * @see FormulaItem#getType()
      */
-    public char getVariableName(){
+    public char getVariableName() {
         return variableName;
     }
 
@@ -165,74 +170,81 @@ public class FormulaItem {
      * If item type is {@link Type#OPERATION} it returns {@link Operation#getPriority()}.
      * If item type is {@link Type#VARIABLE} or {@link Type#DIGIT_LITERAL} it returns {@link FormulaItem#MAXIMUM_PRIORITY}.
      * If item type is {@link Type#OPEN_BRACKET} or {@link Type#CLOSE_BRACKET} it returns {@link FormulaItem#NO_PRIORITY}.
+     *
      * @return priority of item.
      * @see FormulaItem#MINIMAL_PRIORITY
      * @see FormulaItem#MAXIMUM_PRIORITY
      * @see Operation#getPriority()
      */
-    public int getPriority(){
+    public int getPriority() {
         return priority;
     }
 
     /**
      * Checks is item {@link Type} of {@link Type#OPERATION}
+     *
      * @return 'true' if item {@link Type} of {@link Type#OPERATION} or 'false' otherwise.
      */
-    public boolean isOperation(){
-        return operation!=null;
+    public boolean isOperation() {
+        return operation != null;
     }
 
     /**
      * Check is item represents {@link formula.parser.operation.BinaryOperation}
-     * @return  'true' if item {@link Type} of {@link Type#OPERATION} and represent
-     *          {@link formula.parser.operation.Operation.Type} is
-     *          {@link formula.parser.operation.Operation.Type#BINARY},
-     *          'false' otherwise.
+     *
+     * @return 'true' if item {@link Type} of {@link Type#OPERATION} and represent
+     *         {@link formula.parser.operation.Operation.Type} is
+     *         {@link formula.parser.operation.Operation.Type#BINARY},
+     *         'false' otherwise.
      */
-    public boolean isBinaryOperation(){
-        return operation!=null && operation.getType() == Operation.Type.BINARY;
+    public boolean isBinaryOperation() {
+        return operation != null && operation.getType() == Operation.Type.BINARY;
     }
 
     /**
      * Check is item represents {@link formula.parser.operation.UnaryOperation}
-     * @return  'true' if item {@link Type} of {@link Type#OPERATION} and represent
-     *          {@link formula.parser.operation.Operation.Type} is
-     *          {@link formula.parser.operation.Operation.Type#UNARY},
-     *          'false' otherwise.
+     *
+     * @return 'true' if item {@link Type} of {@link Type#OPERATION} and represent
+     *         {@link formula.parser.operation.Operation.Type} is
+     *         {@link formula.parser.operation.Operation.Type#UNARY},
+     *         'false' otherwise.
      */
-    public boolean isUnaryOperation(){
-        return operation!=null && operation.getType() == Operation.Type.UNARY;
+    public boolean isUnaryOperation() {
+        return operation != null && operation.getType() == Operation.Type.UNARY;
     }
 
     /**
      * Checks is item type of {@link Type#OPEN_BRACKET} or {@link Type#CLOSE_BRACKET}.
-     * @return  'true' if item is item type of {@link Type#OPEN_BRACKET} or {@link Type#CLOSE_BRACKET},
-     *          'false' otherwise.
+     *
+     * @return 'true' if item is item type of {@link Type#OPEN_BRACKET} or {@link Type#CLOSE_BRACKET},
+     *         'false' otherwise.
      */
-    public boolean isBracket(){
+    public boolean isBracket() {
         return type == Type.OPEN_BRACKET || type == Type.CLOSE_BRACKET;
     }
 
     /**
      * Checks is item type of {@link Type#VARIABLE} or {@link Type#DIGIT_LITERAL}.
-     * @return  'true' if item is item type of {@link Type#VARIABLE} or {@link Type#DIGIT_LITERAL},
-     *          'false' otherwise.
+     *
+     * @return 'true' if item is item type of {@link Type#VARIABLE} or {@link Type#DIGIT_LITERAL},
+     *         'false' otherwise.
      */
-    public boolean isArgument(){
-        return type == FormulaItem.Type.DIGIT_LITERAL || type== FormulaItem.Type.VARIABLE;
+    public boolean isArgument() {
+        return type == FormulaItem.Type.DIGIT_LITERAL || type == FormulaItem.Type.VARIABLE;
     }
 
     /**
      * Return {@link Type} of item.
+     *
      * @return {@link Type} of item.
      */
-    public Type getType(){
+    public Type getType() {
         return type;
     }
 
     @Override
-    public String toString(){
-        switch (type){
+    public String toString() {
+        switch (type) {
 
             case OPERATION:
                 return operation.toString();

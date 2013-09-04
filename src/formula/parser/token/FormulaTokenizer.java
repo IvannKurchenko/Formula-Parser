@@ -13,6 +13,7 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
 
     /**
      * Creates tokenizer related to incoming formula string.
+     *
      * @param formula formula in string presentations.
      * @throws FormulaParseException in case if unknown operation or any other element will be found.
      */
@@ -22,9 +23,10 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
 
     /**
      * Returns list of {@link FormulaToken} split from incoming formula in string presentation
+     *
      * @return list of split tokens.
      */
-    public List<FormulaToken> getTokenList(){
+    public List<FormulaToken> getTokenList() {
         return itemList;
     }
 
@@ -33,17 +35,17 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
         return itemList.iterator();
     }
 
-    private List<FormulaToken> splitOnTokens(String formula) throws FormulaParseException{
+    private List<FormulaToken> splitOnTokens(String formula) throws FormulaParseException {
         List<FormulaToken> items = new ArrayList<FormulaToken>();
-        int i =0;
-        while(i<formula.length()){
+        int i = 0;
+        while (i < formula.length()) {
 
-            if(Character.isWhitespace(formula.charAt(i))){
+            if (Character.isWhitespace(formula.charAt(i))) {
                 continue;
             }
 
             FormulaToken formulaToken = nextToken(formula, i);
-            if(formulaToken!=null){
+            if (formulaToken != null) {
                 items.add(formulaToken);
                 i += formulaToken.getTokenSize();
             } else {
@@ -53,17 +55,17 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
         return Collections.unmodifiableList(items);
     }
 
-    private FormulaToken nextToken(String formula, int startPosition){
-        for(FormulaTokenChecker checker : FormulaTokenCheckers.values()){
+    private FormulaToken nextToken(String formula, int startPosition) {
+        for (FormulaTokenChecker checker : FormulaTokenCheckers.values()) {
             FormulaToken formulaToken = checker.checkToken(formula, startPosition);
-            if(formulaToken != null){
+            if (formulaToken != null) {
                 return formulaToken;
             }
         }
         return null;
     }
 
-    private void throwException(String formulaString, int offset) throws FormulaParseException{
-        throw new FormulaParseException(formulaString,offset);
+    private void throwException(String formulaString, int offset) throws FormulaParseException {
+        throw new FormulaParseException(formulaString, offset);
     }
 }

@@ -3,12 +3,12 @@ package formula.parser.operation;
 /**
  * Enum of specific {@link UnaryOperation} implementations.
  */
-public enum  UnaryOperations implements UnaryOperation {
+public enum UnaryOperations implements UnaryOperation {
 
-    FACTORIAL(1,"!"){
+    FACTORIAL(1, "!") {
         @Override
         public double operate(double argument) {
-            return argument > 0 ? fact(argument) : 0 ;
+            return argument > 0 ? fact(argument) : 0;
         }
 
         private double fact(double num) {
@@ -16,49 +16,49 @@ public enum  UnaryOperations implements UnaryOperation {
         }
     },
 
-    LN(1,"ln"){
+    LN(1, "ln") {
         @Override
         public double operate(double argument) {
             return Math.log(argument);
         }
     },
 
-    SIN(1,"sin") {
+    SIN(1, "sin") {
         @Override
         public double operate(double argument) {
             return Math.sin(argument);
         }
     },
 
-    COS(1,"cos") {
+    COS(1, "cos") {
         @Override
         public double operate(double argument) {
             return Math.cos(argument);
         }
     },
 
-    TAN (1,"tan") {
+    TAN(1, "tan") {
         @Override
         public double operate(double argument) {
             return Math.tan(argument);
         }
     },
 
-    ARC_SIN (1,"asin","arcsin") {
+    ARC_SIN(1, "asin", "arcsin") {
         @Override
         public double operate(double argument) {
             return Math.asin(argument);
         }
     },
 
-    ARC_COS(1,"acos","arccos"){
+    ARC_COS(1, "acos", "arccos") {
         @Override
         public double operate(double argument) {
             return Math.acos(argument);
         }
     },
 
-    ARC_TAN (1,"atan","arctan") {
+    ARC_TAN(1, "atan", "arctan") {
         @Override
         public double operate(double argument) {
             return Math.atan(argument);
@@ -68,13 +68,13 @@ public enum  UnaryOperations implements UnaryOperation {
     private int priority;
     private String[] sings;
 
-    UnaryOperations(int priority, String... sings){
+    UnaryOperations(int priority, String... sings) {
         this.priority = priority;
         this.sings = sings;
     }
 
     @Override
-    public Type getType(){
+    public Type getType() {
         return Type.UNARY;
     }
 
