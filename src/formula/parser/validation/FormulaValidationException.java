@@ -2,7 +2,12 @@ package formula.parser.validation;
 
 import formula.parser.FormulaParseException;
 
-public class FormulaValidationException extends FormulaParseException{
+/**
+ * Specific type of {@link FormulaParseException}, signal that a formula in string presentation
+ * was parsed onto list structure items (operations, variables etc...), but this items
+ * not corresponds for formula mathematical rules and incorrect.
+ */
+public class FormulaValidationException extends FormulaParseException {
 
     /**
      * Constructs a ParseException with the specified detail message and

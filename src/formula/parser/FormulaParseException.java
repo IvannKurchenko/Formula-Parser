@@ -2,6 +2,9 @@ package formula.parser;
 
 import java.text.ParseException;
 
+/**
+ * Signal, that some error occurred during formula parse process.
+ */
 public class FormulaParseException extends ParseException {
 
     /**
