@@ -89,6 +89,6 @@ public class OperationResolver {
      * @see UnaryOperations
      */
     public static UnaryOperation findUnaryOperationBySign(String sign){
-        return UNARY_OPERATIONS.remove(sign);
+        return UNARY_OPERATIONS.get(sign);
     }
 }
