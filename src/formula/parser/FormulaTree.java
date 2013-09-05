@@ -172,7 +172,7 @@ import static formula.parser.FormulaItem.Type.*;
         }
 
         Node parentNode = operationNode.getParentNode();
-        return  parentNode != null && parentNode.isBracket() ?
+        return  parentNode != null && parentNode.getFormulaItem().isBracket() ?
                 parentNode :
                 rootNode;
     }
@@ -255,9 +255,9 @@ import static formula.parser.FormulaItem.Type.*;
 
         if (parentNode != null) {
 
-            if (parentNode.isBinaryOperation()) {
+            if (parentNode.getFormulaItem().isBinaryOperation()) {
                 parentNode.setRightNode(newOperationNode);
-            } else if (parentNode.isBracket()) {
+            } else if (parentNode.getFormulaItem().isBracket()) {
                 parentNode.setLeftNode(newOperationNode);
             }
 
@@ -411,7 +411,7 @@ import static formula.parser.FormulaItem.Type.*;
     }
 
     private double calculateOperation(Node node, Map<Character, Double> arguments) {
-        if (node.isBinaryOperation()) {
+        if (node.getFormulaItem().isBinaryOperation()) {
 
             BinaryOperation binaryOperation = (BinaryOperation) node.getFormulaItem().getOperation();
             double leftArgument = calculate(node.getLeftNode(), arguments);
@@ -490,14 +490,6 @@ import static formula.parser.FormulaItem.Type.*;
         boolean isLeaf() {
             return  formulaItem.getType() == FormulaItem.Type.VARIABLE |
                     formulaItem.getType() == DIGIT_LITERAL;
-        }
-
-        boolean isBracket(){
-            return  formulaItem.isBracket();
-        }
-
-        boolean isBinaryOperation(){
-            return  formulaItem.isBinaryOperation();
         }
 
         @Override
