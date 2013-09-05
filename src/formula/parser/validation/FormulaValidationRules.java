@@ -40,18 +40,37 @@ public enum FormulaValidationRules implements FormulaValidationRule {
     },
 
     /**
-     * This rule checks that between literal digit value and variable should be some operation.
-     * For example : a * 3 - correct expression, a3 or a( - incorrect expression.
+     * This rule checks that between arguments (literal digit value and variable) should be some operation.
+     * For example : a * 3, a * (3... - correct expressions, a3 ,3a, 3( or )3 - incorrect expression.
      */
-    LITERAL_VARIABLE_RULE("No operation for %s argument") {
+    ARGUMENTS_RULE("No operation for %s argument") {
         @Override
         public void validate(FormulaTokenizer formulaItems) throws FormulaValidationException {
             List<FormulaToken> tokenList = formulaItems.getTokenList();
             for (int i = 0; i < tokenList.size() - 1; i++) {
-                FormulaItem firstItem = tokenList.get(i).getItem();
-                FormulaItem secondItem = tokenList.get(i + 1).getItem();
-                //TODO : write rule!
+
+                FormulaToken firstToken = tokenList.get(i);
+                FormulaToken secondToken = tokenList.get(i + 1);
+
+                ruleAssertTrue( !(isArgument(firstToken) && isArgument(secondToken)) , secondToken);
+
+                ruleAssertTrue( !(isArgument(firstToken) && isOpenBracket(secondToken)) , secondToken);
+
+                ruleAssertTrue( !(isCloseBracket(firstToken) && isArgument(secondToken)) , secondToken);
             }
+        }
+
+        private boolean isArgument(FormulaToken token){
+            return  token.getItem().getType() == FormulaItem.Type.VARIABLE |
+                    token.getItem().getType() == FormulaItem.Type.DIGIT_LITERAL;
+        }
+
+        private boolean isOpenBracket(FormulaToken token){
+            return token.getItem().getType() == FormulaItem.Type.OPEN_BRACKET;
+        }
+
+        private boolean isCloseBracket(FormulaToken token){
+            return token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET;
         }
     },
 
@@ -103,7 +122,7 @@ public enum FormulaValidationRules implements FormulaValidationRule {
     }
 
     protected String formatErrorMessage(FormulaToken nonValidToken) {
-        return String.format(errorMessage, nonValidToken.getItem().getType().name());
+        return String.format(errorMessage, nonValidToken.getItem());
     }
 
     protected void ruleAssertTrue(boolean condition, FormulaToken nonValidToken) throws FormulaValidationException {

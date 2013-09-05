@@ -4,7 +4,7 @@ import formula.parser.token.FormulaTokenizer;
 import formula.parser.validation.FormulaValidator;
 
 /**
- * Parser for formula in string presentation
+ * Parser for formula in string presentation.
  */
 public class FormulaParser {
 
