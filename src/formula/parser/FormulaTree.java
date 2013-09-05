@@ -12,7 +12,7 @@ import static formula.parser.FormulaItem.Type.*;
 class FormulaTree implements Formula {
 
     private Node rootNode;
-    protected Set<Character> variables;
+    private Set<Character> variables;
 
     FormulaTree(FormulaTokenizer formulaTokenizer) {
         variables = new HashSet<Character>();
@@ -50,188 +50,187 @@ class FormulaTree implements Formula {
         }
     }
 
-    private Node addNode(FormulaItem formulaItem, Node node) {
-        if (formulaItem.isArgument()) {
-            return addArgument(formulaItem, node);
-        }
+    private Node addNode(FormulaItem formulaItem, Node startNode) {
+        switch (formulaItem.getType()){
 
-        if (formulaItem.isOperation()) {
-            return addOperation(formulaItem, node);
-        }
+            case VARIABLE:
+            case DIGIT_LITERAL:
+                return addArgument(formulaItem, startNode);
 
-        if (formulaItem.isBracket()) {
-            return addBracket(formulaItem, node);
-        }
+            case OPERATION:
+                return addOperation(formulaItem, startNode);
 
-        return rootNode;
-    }
+            case OPEN_BRACKET:
+            case CLOSE_BRACKET:
+                return addBracket(formulaItem, startNode);
 
-    private Node addArgument(FormulaItem item, Node node) {
-
-        if (node.getFormulaItem().isUnaryOperation()) {
-            Node unaryArgumentNode = new Node(item, node);
-            node.setLeftNode(unaryArgumentNode);
-            Node parentNode = node.getParentNode();
-            if (parentNode != null) {
-                return parentNode.getFormulaItem().isBracket() ? parentNode : rootNode;
-            } else {
+            default:
                 return rootNode;
-            }
-
         }
+    }
 
-        if (node.getFormulaItem().isBinaryOperation()) {
-            Node binaryRightArgument = new Node(item, node);
-            node.setRightNode(binaryRightArgument);
-            Node parentNode = node.getParentNode();
-            if (parentNode != null) {
-                return parentNode.getFormulaItem().isBracket() ? parentNode : rootNode;
-            } else {
+    private Node addArgument(FormulaItem item, Node startNode) {
+
+        switch (startNode.getFormulaItem().getType()){
+
+            case OPERATION:
+                return addArgumentToOperation(item, startNode);
+
+            case OPEN_BRACKET:
+            case CLOSE_BRACKET:
+                return addArgumentToBracket(item, startNode);
+
+            default:
                 return rootNode;
-            }
         }
-
-        if (node.getFormulaItem().isBracket()) {
-            Node argumentNode = new Node(item, node);
-            node.setLeftNode(argumentNode);
-            return node;
-        }
-
-        return rootNode;
     }
 
-    private Node addOperation(FormulaItem item, Node node) {
-        if (node.getFormulaItem().isArgument()) {
-            return addOperationToArgumentNode(item, node);
+    private Node addArgumentToOperation(FormulaItem item, Node operationNode) {
+        Node argumentNode = new Node(item, operationNode);
+
+        switch (operationNode.getFormulaItem().getOperation().getType()) {
+            case BINARY:
+                operationNode.setRightNode(argumentNode);
+                break;
+
+            case UNARY:
+                operationNode.setLeftNode(argumentNode);
         }
 
-        if (node.getFormulaItem().isOperation()) {
-            return addOperationToOperationNode(item, node);
-        }
-
-        if (node.getFormulaItem().isBracket()) {
-            return addOperationToBracketNode(item, node);
-        }
-
-        return rootNode;
+        Node parentNode = operationNode.getParentNode();
+        return  parentNode != null && parentNode.isBracket() ?
+                parentNode :
+                rootNode;
     }
 
-    private Node addOperationToArgumentNode(FormulaItem item, Node node) {
-        Node parent = node.getParentNode();
-        Node operationNode = new Node(item, parent);
-        operationNode.setLeftNode(node);
-        node.setParentNode(operationNode);
+    private Node addArgumentToBracket(FormulaItem item, Node bracketNode){
+        Node argumentNode = new Node(item, bracketNode);
+        bracketNode.setLeftNode(argumentNode);
+        return bracketNode;
+    }
 
-        if (parent != null) {
-            if (parent.getFormulaItem().isBinaryOperation()) {
-                parent.setRightNode(operationNode);
-            } else if (parent.getFormulaItem().isBracket()) {
-                parent.setLeftNode(operationNode);
+    private Node addOperation(FormulaItem item, Node startNode) {
+        switch (startNode.getFormulaItem().getType()){
+            case VARIABLE:
+            case DIGIT_LITERAL:
+                return reduceOperation(item, startNode);
+
+            case OPERATION:
+                return addOperationToOperation(item, startNode);
+
+            case OPEN_BRACKET:
+            case CLOSE_BRACKET:
+                return addOperationToBracket(item, startNode);
+
+            default:
+                return rootNode;
+        }
+    }
+
+    private Node addOperationToOperation(FormulaItem item, Node operationNode) {
+        int itemPriority = item.getPriority();
+        int nodePriority = operationNode.getFormulaItem().getPriority();
+
+        if (itemPriority > nodePriority) {
+
+            return increaseOperation(item, operationNode);
+
+        } else {
+
+            return reduceOperation(item, operationNode);
+        }
+    }
+
+    private Node reduceOperation(FormulaItem item, Node startNode){
+        Node parentNode = startNode.getParentNode();
+        Node operationNode = new Node(item, parentNode);
+        operationNode.setLeftNode(startNode);
+        startNode.setParentNode(operationNode);
+
+        if (parentNode != null) {
+
+            if (parentNode.isBinaryOperation()) {
+                parentNode.setRightNode(operationNode);
+            } else if (parentNode.isBracket()) {
+                parentNode.setLeftNode(operationNode);
             }
+
             return operationNode;
+
         } else {
             rootNode = operationNode;
             return rootNode;
         }
     }
 
-    private Node addOperationToOperationNode(FormulaItem item, Node node) {
-        int itemPriority = item.getPriority();
-        int nodePriority = node.getFormulaItem().getPriority();
-
-        if (itemPriority > nodePriority) {
-
-            Node operationNode = new Node(item, node);
-            Node nodeRightArgument = node.getRightNode();
-            operationNode.setLeftNode(nodeRightArgument);
-            node.setRightNode(operationNode);
-            if (nodeRightArgument != null) {
-                nodeRightArgument.setParentNode(operationNode);
-            }
-            return operationNode;
-
-        } else {
-
-            Node parentNode = node.getParentNode();
-            Node operationNode = new Node(item, parentNode);
-            operationNode.setLeftNode(node);
-            node.setParentNode(operationNode);
-
-            if (parentNode != null) {
-
-                if (parentNode.getFormulaItem().isBinaryOperation()) {
-                    parentNode.setRightNode(operationNode);
-                } else if (parentNode.getFormulaItem().isBracket()) {
-                    parentNode.setLeftNode(operationNode);
-                }
-
-                return operationNode;
-
-            } else {
-                rootNode = operationNode;
-                return rootNode;
-            }
-
+    private Node increaseOperation(FormulaItem item, Node startNode){
+        Node operationNode = new Node(item, startNode);
+        Node nodeRightArgument = startNode.getRightNode();
+        operationNode.setLeftNode(nodeRightArgument);
+        startNode.setRightNode(operationNode);
+        if (nodeRightArgument != null) {
+            nodeRightArgument.setParentNode(operationNode);
         }
+        return operationNode;
     }
 
-    private Node addOperationToBracketNode(FormulaItem item, Node node) {
-        Node leftNode = node.getLeftNode();
+    private Node addOperationToBracket(FormulaItem item, Node startNode) {
+        Node leftNode = startNode.getLeftNode();
         if (leftNode != null) {
             Node nextNode = addNode(item, leftNode);
-            return nextNode == rootNode ? node : nextNode;
+            return nextNode == rootNode ? startNode : nextNode;
         } else {
-            Node bracketLeftNode = new Node(item, node);
-            node.setLeftNode(bracketLeftNode);
-            return node;
+            Node bracketLeftNode = new Node(item, startNode);
+            startNode.setLeftNode(bracketLeftNode);
+            return startNode;
         }
     }
 
-    private Node addBracket(FormulaItem item, Node node) {
+    private Node addBracket(FormulaItem item, Node startNode) {
+        switch (item.getType()){
+            case OPEN_BRACKET:
+                return addOpenBracket(item, startNode);
 
-        if (item.getType() == FormulaItem.Type.OPEN_BRACKET) {
-            return addOpenBracket(item, node);
+            case CLOSE_BRACKET:
+                return addCloseBracket(item, startNode);
+
+            default:
+                return rootNode;
         }
-
-        if (item.getType() == FormulaItem.Type.CLOSE_BRACKET) {
-            return addCloseBracket(item, node);
-        }
-
-        return rootNode;
-
     }
 
-    private Node addOpenBracket(FormulaItem item, Node node) {
+    private Node addOpenBracket(FormulaItem item, Node startNode) {
+        switch (startNode.getFormulaItem().getType()){
+            case OPERATION:
+                return addOpenBracketToOperation(item, startNode);
 
-        if (node.getFormulaItem().isOperation()) {
-            return addOpenBracketToOperationNode(item, node);
+            case OPEN_BRACKET:
+            case CLOSE_BRACKET:
+                return addOpenBracketToBracket(item, startNode);
+
+            default:
+                return startNode;
         }
-
-        if (node.getFormulaItem().isBracket()) {
-            return addOpenBracketToBracketNode(item, node);
-        }
-
-        return node;
     }
 
-    private Node addOpenBracketToOperationNode(FormulaItem item, Node node) {
-        BracketsNode bracketsNode = new BracketsNode(item, node);
-
-        if (node.getFormulaItem().isUnaryOperation()) {
-            node.setLeftNode(bracketsNode);
-        } else if (node.getFormulaItem().isBinaryOperation()) {
-            node.setRightNode(bracketsNode);
+    private Node addOpenBracketToOperation(FormulaItem item, Node operationNode) {
+        BracketsNode bracketsNode = new BracketsNode(item, operationNode);
+        switch(operationNode.getFormulaItem().getOperation().getType()){
+            case UNARY:
+                operationNode.setLeftNode(bracketsNode);
+                break;
+            case BINARY:
+                operationNode.setRightNode(bracketsNode);
         }
-
         return bracketsNode;
     }
 
-    private Node addOpenBracketToBracketNode(FormulaItem item, Node node) {
+    private Node addOpenBracketToBracket(FormulaItem item, Node bracketNode) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
-    private Node addCloseBracket(FormulaItem item, Node node) {
-        BracketsNode bracketsNode = (BracketsNode) node;
+    private Node addCloseBracket(FormulaItem item, Node startNode) {
+        BracketsNode bracketsNode = (BracketsNode) startNode;
         bracketsNode.setCloseBracket(item);
         Node parentBracketNode = bracketsNode.getParentBracket();
         return parentBracketNode != null ? parentBracketNode : rootNode;
@@ -250,16 +249,14 @@ class FormulaTree implements Formula {
                 return getVariableValue(node, arguments);
 
             case OPEN_BRACKET:
-
             case CLOSE_BRACKET:
-
             default:
                 return calculate(node.getLeftNode(), arguments);
         }
     }
 
     private double calculateOperation(Node node, Map<Character, Double> arguments) {
-        if (node.getFormulaItem().isBinaryOperation()) {
+        if (node.isBinaryOperation()) {
 
             BinaryOperation binaryOperation = (BinaryOperation) node.getFormulaItem().getOperation();
             double leftArgument = calculate(node.getLeftNode(), arguments);
@@ -336,8 +333,16 @@ class FormulaTree implements Formula {
         }
 
         boolean isLeaf() {
-            return formulaItem.getType() == FormulaItem.Type.VARIABLE |
+            return  formulaItem.getType() == FormulaItem.Type.VARIABLE |
                     formulaItem.getType() == DIGIT_LITERAL;
+        }
+
+        boolean isBracket(){
+            return  formulaItem.isBracket();
+        }
+
+        boolean isBinaryOperation(){
+            return  formulaItem.isBinaryOperation();
         }
 
         @Override

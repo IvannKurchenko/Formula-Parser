@@ -6,7 +6,7 @@ import java.util.Map;
 public class Main {
     public static void main(String... args) {
 
-        String formula = "x+sin(2)+y/2.5-z*(10*5+z*(x-1)-2)";
+        String formula = "x+sin(2)+y/2.5-z*(10*5-2)-z*(2+x)";
         //String formula = "x+(2*3)-y/5";
         try {
             Formula f = FormulaParser.parse(formula);
@@ -14,7 +14,7 @@ public class Main {
 
             for (double i = 1; i < 5; i++) {
                 //double res = i+2*3-i/5;
-                double res = i + Math.sin(2) + i / 2.5 - i * (10 * 5 - 2);
+                double res = i + Math.sin(2) + i / 2.5 - i * (10 * 5 - 2) - i*(2+i);
                 for (Character variable : f.variables()) {
                     arguments.put(variable, i);
                 }
@@ -24,6 +24,5 @@ public class Main {
         } catch (FormulaParseException e) {
             e.printStackTrace();
         }
-
     }
 }

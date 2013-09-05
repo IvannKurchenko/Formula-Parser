@@ -181,15 +181,6 @@ public class FormulaItem {
     }
 
     /**
-     * Checks is item {@link Type} of {@link Type#OPERATION}
-     *
-     * @return 'true' if item {@link Type} of {@link Type#OPERATION} or 'false' otherwise.
-     */
-    public boolean isOperation() {
-        return operation != null;
-    }
-
-    /**
      * Check is item represents {@link formula.parser.operation.BinaryOperation}
      *
      * @return 'true' if item {@link Type} of {@link Type#OPERATION} and represent
@@ -221,16 +212,6 @@ public class FormulaItem {
      */
     public boolean isBracket() {
         return type == Type.OPEN_BRACKET || type == Type.CLOSE_BRACKET;
-    }
-
-    /**
-     * Checks is item type of {@link Type#VARIABLE} or {@link Type#DIGIT_LITERAL}.
-     *
-     * @return 'true' if item is item type of {@link Type#VARIABLE} or {@link Type#DIGIT_LITERAL},
-     *         'false' otherwise.
-     */
-    public boolean isArgument() {
-        return type == FormulaItem.Type.DIGIT_LITERAL || type == FormulaItem.Type.VARIABLE;
     }
 
     /**
