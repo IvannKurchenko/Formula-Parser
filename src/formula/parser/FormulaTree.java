@@ -18,7 +18,7 @@ import static formula.parser.FormulaItem.Type.*;
  * <p> - {@link FormulaItem.Type#OPERATION} - could contain 1 or 2 children node's that depends on
  *      {@link formula.parser.operation.Operation.Type} of {@link formula.parser.operation.Operation} that item
  *      represents. {@link formula.parser.operation.Operation.Type#UNARY} operation contain one children node
- *      (it's left node by default) and {@link formula.parser.operation.Operation.Type#BINARY}.
+ *      (it's left node by default) and {@link formula.parser.operation.Operation.Type#BINARY} - two children nodes.
  *      Each children node of {@link FormulaItem.Type#OPERATION} node represents argument of
  *      {@link formula.parser.operation.Operation}.
  *
@@ -29,7 +29,7 @@ import static formula.parser.FormulaItem.Type.*;
  *
  *
  * <p> - {@link FormulaItem.Type#OPEN_BRACKET} and {@link FormulaItem.Type#CLOSE_BRACKET} - contains one children node.
- *       {@link BracketsNode} is a spacial node implementation for bracket node. Each {@link BracketsNode} could be
+ *       {@link BracketsNode} is a special node implementation for bracket node. Each {@link BracketsNode} could be
  *       represented as a root node of formula subtree.
  *
  * <H1>Build of tree</H1>
@@ -38,26 +38,27 @@ import static formula.parser.FormulaItem.Type.*;
  * <p> - Priority of of parent node lower or equal than priority of children node. So, priority of nodes should increase
  *       from root node to leaf in tree. Priority of node defined as priority of {@link FormulaItem} that it contains.
  *
- * <p> - {@link BracketsNode} have no any priority and inside of brackets formula build by the same rules, as
- *       general tree.
+ * <p> - {@link BracketsNode} have no any priority and inside of brackets formula builds recursively by the same rules,
+ *       as general tree.
  *
  * <p> - {@link FormulaItem.Type#VARIABLE} and {@link FormulaItem.Type#DIGIT_LITERAL} - nodes that
  *       represents arguments and should be leaves of tree, that's why they have {@link FormulaItem#MAXIMUM_PRIORITY}.
  *
  * <p> - If node could contain just one children node, by default, children node is left.
  *
- * <H1>Calculation</H!>
+ * <H1>Calculation</H1>
  * As a result of building tree rules, process of formula calculation is next : to calculate value of node need to
  * recursively calculate value of right subtree, left subtree and than value value of node. Leaf node
  * is node with arguments and contains simple value. Nodes with children node represents node with
  * {@link formula.parser.operation.Operation} and value calculate as a operation over children nodes - arguments
  * or {@link BracketsNode} - that simply skip during calculation.
  *
- * <H1>Example</H>
+ * <H1>Example</H1>
  *  As example, for formula "( x - 2 ) * y - z / 4" result formula tree will be next :
  *
- *  <br>
- *  <br>                      ___
+<<<<<<< HEAD
+ *  <br>                       R
+ *  <br>                      _|_
  *  <br>                     |_-_|
  *  <br>                    /     \
  *  <br>                ___/       \ ___
@@ -69,6 +70,7 @@ import static formula.parser.FormulaItem.Type.*;
  *  <br>  ___/     \___
  *  <br> |_x_|     |_2_|
  *
+ * where R - mean 'root node'
  */
 /*package*/ class FormulaTree implements Formula {
 
