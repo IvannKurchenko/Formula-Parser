@@ -25,7 +25,7 @@ import static formula.parser.FormulaItem.Type.*;
  *
  * <p> - {@link FormulaItem.Type#VARIABLE} - not contains any children nodes and is a leaf of tree.
  *
- * <p> - {@link FormulaItem.Type#DIGIT_LITERAL} - not contains any children nodes and is a leaf of tree.
+ * <p> - {@link FormulaItem.Type#DIGIT} - not contains any children nodes and is a leaf of tree.
  *
  *
  * <p> - {@link FormulaItem.Type#OPEN_BRACKET} and {@link FormulaItem.Type#CLOSE_BRACKET} - contains one children node.
@@ -41,7 +41,7 @@ import static formula.parser.FormulaItem.Type.*;
  * <p> - {@link BracketsNode} have no any priority and inside of brackets formula builds recursively by the same rules,
  *       as general tree.
  *
- * <p> - {@link FormulaItem.Type#VARIABLE} and {@link FormulaItem.Type#DIGIT_LITERAL} - nodes that
+ * <p> - {@link FormulaItem.Type#VARIABLE} and {@link FormulaItem.Type#DIGIT} - nodes that
  *       represents arguments and should be leaves of tree, that's why they have {@link FormulaItem#MAXIMUM_PRIORITY}.
  *
  * <p> - If node could contain just one children node, by default, children node is left.
@@ -115,7 +115,7 @@ import static formula.parser.FormulaItem.Type.*;
     private Node addNode(FormulaItem formulaItem, Node startNode) {
         switch (formulaItem.getType()){
             case VARIABLE:
-            case DIGIT_LITERAL:
+            case DIGIT:
                 return addArgument(formulaItem, startNode);
 
             case OPERATION:
@@ -198,7 +198,7 @@ import static formula.parser.FormulaItem.Type.*;
     private Node addOperation(FormulaItem item, Node startNode) {
         switch (startNode.getFormulaItem().getType()){
             case VARIABLE:
-            case DIGIT_LITERAL:
+            case DIGIT:
                 return reduceOperation(item, startNode);
 
             case OPERATION:
@@ -399,7 +399,7 @@ import static formula.parser.FormulaItem.Type.*;
             case OPERATION:
                 return calculateOperation(node, arguments);
 
-            case DIGIT_LITERAL:
+            case DIGIT:
                 return getLiteralValue(node);
 
             case VARIABLE:
@@ -491,7 +491,7 @@ import static formula.parser.FormulaItem.Type.*;
 
         boolean isLeaf() {
             return  formulaItem.getType() == FormulaItem.Type.VARIABLE |
-                    formulaItem.getType() == DIGIT_LITERAL;
+                    formulaItem.getType() == DIGIT;
         }
 
         @Override

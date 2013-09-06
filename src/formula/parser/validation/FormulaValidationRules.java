@@ -125,6 +125,6 @@ public enum FormulaValidationRules implements FormulaValidationRule {
 
     protected boolean isArgument(FormulaToken token){
         return  token.getItem().getType() == FormulaItem.Type.VARIABLE |
-                token.getItem().getType() == FormulaItem.Type.DIGIT_LITERAL;
+                token.getItem().getType() == FormulaItem.Type.DIGIT;
     }
 }

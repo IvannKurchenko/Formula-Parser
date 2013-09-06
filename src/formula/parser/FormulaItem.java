@@ -19,7 +19,7 @@ public class FormulaItem {
         /**
          * Type of {@link FormulaItem} that represents digit literal value.
          */
-        DIGIT_LITERAL,
+        DIGIT,
 
         /**
          * Type of {@link FormulaItem} that represents variable.
@@ -66,7 +66,7 @@ public class FormulaItem {
      *
      * @param digitValue value of digit literal
      * @return new {@link FormulaItem} that represents digit literal
-     * @see Type#DIGIT_LITERAL
+     * @see Type#DIGIT
      */
     public static FormulaItem newDigitLiteralItem(double digitValue) {
         return new FormulaItem(digitValue);
@@ -105,7 +105,7 @@ public class FormulaItem {
     }
 
     private FormulaItem(double literalValue) {
-        type = Type.DIGIT_LITERAL;
+        type = Type.DIGIT;
         priority = MAXIMUM_PRIORITY;
         this.literalValue = literalValue;
 
@@ -144,7 +144,7 @@ public class FormulaItem {
     /**
      * Return value of literal digit that item represents or
      * {@link FormulaItem#LITERAL_NO_VALUE} if item is not operation.
-     * Supported for {@link Type#DIGIT_LITERAL}
+     * Supported for {@link Type#DIGIT}
      *
      * @return value of digit literal.
      * @see FormulaItem#getType()
@@ -168,7 +168,7 @@ public class FormulaItem {
     /**
      * Returns priority of item.
      * If item type is {@link Type#OPERATION} it returns {@link Operation#getPriority()}.
-     * If item type is {@link Type#VARIABLE} or {@link Type#DIGIT_LITERAL} it returns {@link FormulaItem#MAXIMUM_PRIORITY}.
+     * If item type is {@link Type#VARIABLE} or {@link Type#DIGIT} it returns {@link FormulaItem#MAXIMUM_PRIORITY}.
      * If item type is {@link Type#OPEN_BRACKET} or {@link Type#CLOSE_BRACKET} it returns {@link FormulaItem#NO_PRIORITY}.
      *
      * @return priority of item.
@@ -230,7 +230,7 @@ public class FormulaItem {
             case OPERATION:
                 return operation.toString();
 
-            case DIGIT_LITERAL:
+            case DIGIT:
                 return Double.toString(literalValue);
 
             case VARIABLE:
