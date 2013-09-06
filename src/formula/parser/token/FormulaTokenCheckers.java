@@ -7,12 +7,12 @@ import formula.parser.operation.OperationResolver;
 /**
  * Enum of specific {@link FormulaTokenChecker} implementations.
  */
-enum FormulaTokenCheckers implements FormulaTokenChecker {
+public enum FormulaTokenCheckers implements FormulaTokenChecker {
 
     /**
      * Checks is next {@link FormulaToken} is digit literal value in formula string.
      */
-    DIGIT_LITERAL_CHECKER() {
+    DIGIT_CHECKER() {
         @Override
         public FormulaToken checkToken(String formula, int startPosition) {
             if (!Character.isDigit(formula.charAt(startPosition))) {
@@ -20,7 +20,15 @@ enum FormulaTokenCheckers implements FormulaTokenChecker {
             }
 
             int endPosition = startPosition;
+            int pointCount = 0;
+
             while (endPosition < formula.length() && validDigitLiteralChar(formula.charAt(endPosition))) {
+
+                pointCount += isPoint(formula.charAt(endPosition)) ? 1 : 0;
+                if( pointCount>1 ) {
+                    return null;
+                }
+
                 endPosition++;
             }
 
@@ -31,7 +39,11 @@ enum FormulaTokenCheckers implements FormulaTokenChecker {
         }
 
         private boolean validDigitLiteralChar(char character) {
-            return Character.isDigit(character) || character == '.';
+            return Character.isDigit(character) || isPoint(character);
+        }
+
+        private boolean isPoint(char character){
+            return character == '.';
         }
     },
 
