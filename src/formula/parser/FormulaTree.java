@@ -56,7 +56,6 @@ import static formula.parser.FormulaItem.Type.*;
  * <H1>Example</H1>
  *  As example, for formula "( x - 2 ) * y - z / 4" result formula tree will be next :
  *
-<<<<<<< HEAD
  *  <br>                       R
  *  <br>                      _|_
  *  <br>                     |_-_|
