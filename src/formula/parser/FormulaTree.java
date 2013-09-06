@@ -57,12 +57,13 @@ import static formula.parser.FormulaItem.Type.*;
  *  As example, for formula "( x - 2 ) * y - z / 4" result formula tree will be next :
  *
  *  <br>
- *  <br>                     ___
- *  <br>                    |_-_|
- *  <br>                ___/     \ ___
- *  <br>               |_*_|      |_/_|
- *  <br>            __/       ___/     \___
- *  <br>           |()|      |_z_|     |_4_|
+ *  <br>                      ___
+ *  <br>                     |_-_|
+ *  <br>                    /     \
+ *  <br>                ___/       \ ___
+ *  <br>               |_*_|        |_/_|
+ *  <br>            __/     \___  __/    \___
+ *  <br>           |()|     |_y_||_z_|   |_4_|
  *  <br>       ___/
  *  <br>      |_-_|
  *  <br>  ___/     \___
