@@ -60,11 +60,6 @@ public enum FormulaValidationRules implements FormulaValidationRule {
             }
         }
 
-        private boolean isArgument(FormulaToken token){
-            return  token.getItem().getType() == FormulaItem.Type.VARIABLE |
-                    token.getItem().getType() == FormulaItem.Type.DIGIT_LITERAL;
-        }
-
         private boolean isOpenBracket(FormulaToken token){
             return token.getItem().getType() == FormulaItem.Type.OPEN_BRACKET;
         }
@@ -89,30 +84,26 @@ public enum FormulaValidationRules implements FormulaValidationRule {
                 if (item.isBinaryOperation()) {
 
                     FormulaToken leftArgument = tokenList.get(i - 1);
-                    ruleAssertTrue(isValidLeftArgument(leftArgument.getItem()), leftArgument);
+                    ruleAssertTrue(isValidLeftArgument(leftArgument), leftArgument);
 
                     FormulaToken rightArgument = tokenList.get(i + 1);
-                    ruleAssertTrue(isValidRightArgument(rightArgument.getItem()), rightArgument);
+                    ruleAssertTrue(isValidRightArgument(rightArgument), rightArgument);
                 }
 
             }
         }
 
-        private boolean isValidLeftArgument(FormulaItem item) {
-            return isLiteralOrVariableArgument(item) ||
-                    item.getType() == FormulaItem.Type.CLOSE_BRACKET;
+        private boolean isValidLeftArgument(FormulaToken token) {
+            return  isArgument(token) ||
+                    token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET;
         }
 
-        private boolean isValidRightArgument(FormulaItem item) {
-            return isLiteralOrVariableArgument(item) ||
-                    item.getType() == FormulaItem.Type.OPEN_BRACKET ||
-                    item.isUnaryOperation();
+        private boolean isValidRightArgument(FormulaToken token) {
+            return  isArgument(token) ||
+                    token.getItem().getType() == FormulaItem.Type.OPEN_BRACKET ||
+                    token.getItem().isUnaryOperation();
         }
 
-        private boolean isLiteralOrVariableArgument(FormulaItem item) {
-            return item.getType() == FormulaItem.Type.VARIABLE ||
-                    item.getType() == FormulaItem.Type.DIGIT_LITERAL;
-        }
     };
 
     private String errorMessage;
@@ -130,5 +121,10 @@ public enum FormulaValidationRules implements FormulaValidationRule {
             String formattedErrorMessage = formatErrorMessage(nonValidToken);
             throw new FormulaValidationException(formattedErrorMessage, nonValidToken.getTokenPosition());
         }
+    }
+
+    protected boolean isArgument(FormulaToken token){
+        return  token.getItem().getType() == FormulaItem.Type.VARIABLE |
+                token.getItem().getType() == FormulaItem.Type.DIGIT_LITERAL;
     }
 }
