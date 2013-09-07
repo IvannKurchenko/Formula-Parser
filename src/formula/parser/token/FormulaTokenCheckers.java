@@ -86,15 +86,19 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
                 return null;
             }
 
+            if(formula.length()==1 && Character.isLetter(formula.charAt(startPosition))){
+                return newVariableToken(formula, startPosition);
+            }
+
             boolean nextCharNotLetter = !Character.isLetter(formula.charAt(startPosition + 1));
             boolean nextCharNotDigit = !Character.isDigit(formula.charAt(startPosition + 1));
 
-            if (nextCharNotLetter && nextCharNotDigit) {
-                FormulaItem variableItem = FormulaItem.newVariableItem(formula.charAt(startPosition));
-                return new FormulaToken(variableItem, 1, startPosition);
-            } else {
-                return null;
-            }
+            return nextCharNotLetter && nextCharNotDigit ? newVariableToken(formula, startPosition) : null;
+        }
+
+        private FormulaToken newVariableToken(String formulaString, int startPosition){
+            FormulaItem variableItem = FormulaItem.newVariableItem(formulaString.charAt(startPosition));
+            return new FormulaToken(variableItem, 1, startPosition);
         }
     },
 
