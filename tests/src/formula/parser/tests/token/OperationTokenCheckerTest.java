@@ -10,15 +10,18 @@ import formula.parser.token.FormulaTokenCheckers;
 import junit.framework.Assert;
 import org.junit.Test;
 
-public class OperationTokenCheckerTest {
+public class OperationTokenCheckerTest extends FormulaTokenCheckerTest {
 
     private static final Operation DEFAULT_TEST_OPERATION = BinaryOperations.ADDITION;
     private static final String DEFAULT_TEST_STRING = DEFAULT_TEST_OPERATION.getSigns()[0];
 
+    public OperationTokenCheckerTest() {
+        super(FormulaTokenCheckers.OPERATION_CHECKER);
+    }
+
     @Test
     public void shouldReturnOperationItem() {
-        FormulaToken operationToken = checkToken(DEFAULT_TEST_STRING);
-        Assert.assertEquals(operationToken.getItem().getType(), FormulaItem.Type.OPERATION);
+        assertShouldReturnItemWithType(DEFAULT_TEST_STRING, FormulaItem.Type.OPERATION);
     }
 
     @Test
@@ -96,9 +99,5 @@ public class OperationTokenCheckerTest {
                 assertReturnEqualOperation(operationSign, operation);
             }
         }
-    }
-
-    private FormulaToken checkToken(String testString) {
-        return FormulaTokenCheckers.OPERATION_CHECKER.checkToken(testString, 0);
     }
 }
