@@ -46,7 +46,7 @@ public class FormulaItem {
 
     private final Type type;
     private final Operation operation;
-    private final double literalValue;
+    private final double digitValue;
     private final char variableName;
     private final int priority;
 
@@ -100,14 +100,14 @@ public class FormulaItem {
         priority = operation.getPriority();
         this.operation = operation;
 
-        literalValue = LITERAL_NO_VALUE;
+        digitValue = LITERAL_NO_VALUE;
         variableName = VARIABLE_NO_NAME;
     }
 
-    private FormulaItem(double literalValue) {
+    private FormulaItem(double digitValue) {
         type = Type.DIGIT;
         priority = MAXIMUM_PRIORITY;
-        this.literalValue = literalValue;
+        this.digitValue = digitValue;
 
         operation = null;
         variableName = VARIABLE_NO_NAME;
@@ -119,7 +119,7 @@ public class FormulaItem {
         this.variableName = variableName;
 
         operation = null;
-        literalValue = LITERAL_NO_VALUE;
+        digitValue = LITERAL_NO_VALUE;
     }
 
     private FormulaItem(boolean openBracket) {
@@ -127,7 +127,7 @@ public class FormulaItem {
         priority = NO_PRIORITY;
         operation = null;
         variableName = VARIABLE_NO_NAME;
-        literalValue = LITERAL_NO_VALUE;
+        digitValue = LITERAL_NO_VALUE;
     }
 
     /**
@@ -150,7 +150,7 @@ public class FormulaItem {
      * @see FormulaItem#getType()
      */
     public double getDigitLiteralValue() {
-        return literalValue;
+        return digitValue;
     }
 
     /**
@@ -231,7 +231,7 @@ public class FormulaItem {
                 return operation.toString();
 
             case DIGIT:
-                return Double.toString(literalValue);
+                return Double.toString(digitValue);
 
             case VARIABLE:
                 return Character.toString(variableName);
@@ -245,5 +245,52 @@ public class FormulaItem {
             default:
                 return "unknown";
         }
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if(object == null){
+            return false;
+        }
+
+        if(!(object instanceof FormulaItem)){
+            return false;
+        }
+
+        FormulaItem another = (FormulaItem) object;
+
+        if(type != another.type)
+            return false;
+
+        switch (another.type){
+            case DIGIT:
+                return digitValue == another.digitValue;
+
+            case VARIABLE:
+                return variableName == another.variableName;
+
+            case OPERATION:
+                return operation.equals(another.operation);
+
+            case OPEN_BRACKET:
+                return type == Type.OPEN_BRACKET;
+
+            case CLOSE_BRACKET:
+                return type == Type.CLOSE_BRACKET;
+
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 17;
+        hashCode = 31 * hashCode + type.hashCode();
+        hashCode = 31 * hashCode + operation.hashCode();
+        hashCode = 31 * hashCode + Double.valueOf(digitValue).hashCode();
+        hashCode = 31 * hashCode + variableName;
+        hashCode = 31 * hashCode + priority;
+        return hashCode;
     }
 }
