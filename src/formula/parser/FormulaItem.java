@@ -68,7 +68,7 @@ public class FormulaItem {
      * @return new {@link FormulaItem} that represents digit literal
      * @see Type#DIGIT
      */
-    public static FormulaItem newDigitLiteralItem(double digitValue) {
+    public static FormulaItem newDigitItem(double digitValue) {
         return new FormulaItem(digitValue);
     }
 
@@ -287,7 +287,7 @@ public class FormulaItem {
     public int hashCode() {
         int hashCode = 17;
         hashCode = 31 * hashCode + type.hashCode();
-        hashCode = 31 * hashCode + operation.hashCode();
+        hashCode = 31 * hashCode + (operation != null ? operation.hashCode() : 0 );
         hashCode = 31 * hashCode + Double.valueOf(digitValue).hashCode();
         hashCode = 31 * hashCode + variableName;
         hashCode = 31 * hashCode + priority;

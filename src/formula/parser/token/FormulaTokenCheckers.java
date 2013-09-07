@@ -33,7 +33,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
             }
 
             double result = Double.parseDouble(formula.substring(startPosition, endPosition));
-            FormulaItem digitLiteral = FormulaItem.newDigitLiteralItem(result);
+            FormulaItem digitLiteral = FormulaItem.newDigitItem(result);
             int digitLiteralSize = endPosition - startPosition;
             return new FormulaToken(digitLiteral, digitLiteralSize, startPosition);
         }
