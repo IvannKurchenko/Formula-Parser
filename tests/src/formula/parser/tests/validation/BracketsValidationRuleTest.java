@@ -1,12 +1,15 @@
 package formula.parser.tests.validation;
 
 import formula.parser.FormulaParseException;
-import formula.parser.token.FormulaTokenizer;
 import formula.parser.validation.FormulaValidationException;
 import formula.parser.validation.FormulaValidationRules;
 import org.junit.Test;
 
-public class BracketsValidationRuleTest {
+public class BracketsValidationRuleTest extends FormulaValidationRuleTest {
+
+    public BracketsValidationRuleTest() {
+        super(FormulaValidationRules.BRACKETS_RULE);
+    }
 
     @Test
     public void shouldPassValidation() throws FormulaParseException {
@@ -26,10 +29,5 @@ public class BracketsValidationRuleTest {
     @Test(expected = FormulaValidationException.class)
     public void shouldFailValidationThroughOpenBracketsCountLessThenClose() throws FormulaParseException {
         checkValidation("() (( )))");
-    }
-
-    private void checkValidation(String testString) throws FormulaParseException {
-        FormulaTokenizer tokenizer = new FormulaTokenizer(testString);
-        FormulaValidationRules.BRACKETS_RULE.validate(tokenizer);
     }
 }

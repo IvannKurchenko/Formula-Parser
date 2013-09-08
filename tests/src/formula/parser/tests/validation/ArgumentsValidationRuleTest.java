@@ -1,12 +1,15 @@
 package formula.parser.tests.validation;
 
 import formula.parser.FormulaParseException;
-import formula.parser.token.FormulaTokenizer;
 import formula.parser.validation.FormulaValidationException;
 import formula.parser.validation.FormulaValidationRules;
 import org.junit.Test;
 
-public class ArgumentsValidationRuleTest {
+public class ArgumentsValidationRuleTest extends FormulaValidationRuleTest {
+
+    public ArgumentsValidationRuleTest() {
+        super(FormulaValidationRules.ARGUMENTS_RULE);
+    }
 
     @Test
     public void shouldPassValidationWithOperation() throws FormulaParseException {
@@ -31,10 +34,5 @@ public class ArgumentsValidationRuleTest {
     @Test(expected = FormulaValidationException.class)
     public void shouldFailValidationThoughBracketWithoutNextArgument() throws FormulaParseException {
         checkValidation("3(");
-    }
-
-    private void checkValidation(String testString) throws FormulaParseException {
-        FormulaTokenizer tokenizer = new FormulaTokenizer(testString);
-        FormulaValidationRules.ARGUMENTS_RULE.validate(tokenizer);
     }
 }
