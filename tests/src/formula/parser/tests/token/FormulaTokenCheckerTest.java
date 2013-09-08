@@ -20,9 +20,9 @@ public class FormulaTokenCheckerTest {
         assertEquals(formulaToken.getItem().getType(), requiredType);
     }
 
-    protected void assertTokenSize(FormulaToken token){
-        if(token != null){
-            assertTrue("Token size should be greater then 0", token.getTokenSize()>0);
+    protected void assertTokenSize(FormulaToken token) {
+        if (token != null) {
+            assertTrue("Token size should be greater then 0", token.getTokenSize() > 0);
         }
     }
 
@@ -35,6 +35,4 @@ public class FormulaTokenCheckerTest {
         assertTokenSize(formulaToken);
         return formulaToken;
     }
-
-
 }

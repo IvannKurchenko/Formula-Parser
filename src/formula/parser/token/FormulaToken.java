@@ -49,5 +49,29 @@ public class FormulaToken {
         return String.format("Formula formula.parser.tests.token : Item  = %s, Size = %d, Position = %d",
                 item, tokenPosition, tokenPosition);
     }
+
+    @Override
+    public boolean equals(Object object){
+        if(object == null){
+            return false;
+        }
+        if(!(object instanceof FormulaToken)){
+            return false;
+        }
+
+        FormulaToken another = (FormulaToken) object;
+        return  item.equals( another.item ) &&
+                tokenSize == another.tokenSize &&
+                tokenPosition == another.tokenPosition ;
+    }
+
+    @Override
+    public int hashCode(){
+        int hashCode = 17;
+        hashCode = 31 * hashCode + item.hashCode();
+        hashCode = 31 * hashCode + tokenSize;
+        hashCode = 31 * hashCode + tokenPosition;
+        return hashCode;
+    }
 }
 

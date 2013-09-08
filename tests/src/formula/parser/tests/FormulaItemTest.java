@@ -1,28 +1,19 @@
 package formula.parser.tests;
 
-import formula.parser.FormulaItem;
 import formula.parser.operation.BinaryOperations;
 import formula.parser.operation.Operation;
 import org.junit.Test;
 
 import static formula.parser.FormulaItem.*;
+import static formula.parser.tests.util.AssetUtil.assertHashCodeEquals;
+import static formula.parser.tests.util.AssetUtil.assertNotEquals;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 public class FormulaItemTest {
 
     private static final char DEFAULT_TEST_VARIABLE = 'x';
     private static final double DEFAULT_TEST_DIGIT = 1.0;
     private static final Operation DEFAULT_TEST_OPERATION = BinaryOperations.ADDITION;
-
-
-    private static void assertHashCodeEquals(FormulaItem firstItem, FormulaItem secondItem){
-        assertEquals(firstItem.hashCode(), secondItem.hashCode());
-    }
-
-    private static void assertNotEquals(FormulaItem firstItem, FormulaItem secondItem){
-        assertTrue(!firstItem.equals(secondItem));
-    }
 
     @Test
     public void variableItemsShouldBeEqual(){
