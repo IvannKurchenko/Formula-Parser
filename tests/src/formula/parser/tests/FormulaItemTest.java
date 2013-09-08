@@ -16,72 +16,72 @@ public class FormulaItemTest {
     private static final Operation DEFAULT_TEST_OPERATION = BinaryOperations.ADDITION;
 
     @Test
-    public void variableItemsShouldBeEqual(){
+    public void variableItemsShouldBeEqual() {
         assertEquals(newVariableItem(DEFAULT_TEST_VARIABLE), newVariableItem(DEFAULT_TEST_VARIABLE));
     }
 
     @Test
-    public void variableItemsHashCodeShouldBeEqual(){
+    public void variableItemsHashCodeShouldBeEqual() {
         assertHashCodeEquals(newVariableItem(DEFAULT_TEST_VARIABLE), newVariableItem(DEFAULT_TEST_VARIABLE));
     }
 
     @Test
-    public void variableItemsShouldBeNonEqual(){
+    public void variableItemsShouldBeNonEqual() {
         assertNotEquals(newVariableItem(DEFAULT_TEST_VARIABLE), newVariableItem('y'));
     }
 
     @Test
-    public void digitItemsShouldBeEqual(){
+    public void digitItemsShouldBeEqual() {
         assertEquals(newDigitItem(DEFAULT_TEST_DIGIT), newDigitItem(DEFAULT_TEST_DIGIT));
     }
 
     @Test
-    public void digitItemsHashCodeShouldBeEqual(){
+    public void digitItemsHashCodeShouldBeEqual() {
         assertHashCodeEquals(newDigitItem(DEFAULT_TEST_DIGIT), newDigitItem(DEFAULT_TEST_DIGIT));
     }
 
     @Test
-    public void digitItemsShouldBeNonEqual(){
+    public void digitItemsShouldBeNonEqual() {
         assertNotEquals(newDigitItem(DEFAULT_TEST_DIGIT), newDigitItem(2.0));
     }
 
     @Test
-    public void operationItemsShouldBeEqual(){
+    public void operationItemsShouldBeEqual() {
         assertEquals(newOperationItem(DEFAULT_TEST_OPERATION), newOperationItem(DEFAULT_TEST_OPERATION));
     }
 
     @Test
-    public void operationItemsHashCodeShouldBeEqual(){
+    public void operationItemsHashCodeShouldBeEqual() {
         assertHashCodeEquals(newOperationItem(DEFAULT_TEST_OPERATION), newOperationItem(DEFAULT_TEST_OPERATION));
     }
 
     @Test
-    public void operationItemsShouldBeNonEqual(){
+    public void operationItemsShouldBeNonEqual() {
         assertNotEquals(newOperationItem(DEFAULT_TEST_OPERATION), newOperationItem(BinaryOperations.SUBTRACTION));
     }
 
     @Test
-    public void openBracketItemsShouldBeEqual(){
+    public void openBracketItemsShouldBeEqual() {
         assertEquals(newBracketItem(true), newBracketItem(true));
     }
 
     @Test
-    public void openBracketItemsHashCodeShouldBeEqual(){
+    public void openBracketItemsHashCodeShouldBeEqual() {
         assertHashCodeEquals(newBracketItem(true), newBracketItem(true));
     }
 
     @Test
-    public void closeBracketItemsShouldBeEqual(){
+    public void closeBracketItemsShouldBeEqual() {
         assertEquals(newBracketItem(false), newBracketItem(false));
     }
 
     @Test
-    public void closeBracketItemsHashCodeShouldBeEqual(){
+    public void closeBracketItemsHashCodeShouldBeEqual() {
         assertHashCodeEquals(newBracketItem(false), newBracketItem(false));
     }
 
     @Test
-    public void bracketsItemShouldBeNonEqual(){
+    public void bracketsItemShouldBeNonEqual() {
         assertNotEquals(newBracketItem(true), newBracketItem(false));
     }
 }
