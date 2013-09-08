@@ -41,6 +41,7 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
         while (i < formula.length()) {
 
             if (Character.isWhitespace(formula.charAt(i))) {
+                i++;
                 continue;
             }
 
