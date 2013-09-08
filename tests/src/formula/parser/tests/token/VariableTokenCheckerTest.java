@@ -3,8 +3,10 @@ package formula.parser.tests.token;
 import formula.parser.FormulaItem;
 import formula.parser.token.FormulaToken;
 import formula.parser.token.FormulaTokenCheckers;
-import junit.framework.Assert;
 import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 
 public class VariableTokenCheckerTest extends FormulaTokenCheckerTest {
 
@@ -28,6 +30,13 @@ public class VariableTokenCheckerTest extends FormulaTokenCheckerTest {
     public void shouldReturnEqualVariableTokenWithNonLetterChar() {
         String testString = DEFAULT_VARIABLE + "+";
         assertReturnEqualVariableToken(testString, DEFAULT_VARIABLE.charAt(0));
+    }
+
+    @Test
+    public void shouldReturnVariableAtTheEnd(){
+        String testString = "2 + " + DEFAULT_VARIABLE;
+        FormulaToken variableToken = checkToken(testString, testString.length()-1);
+        assertEquals(variableToken.getItem().getVariableName(), DEFAULT_VARIABLE.charAt(0));
     }
 
     @Test
@@ -55,19 +64,24 @@ public class VariableTokenCheckerTest extends FormulaTokenCheckerTest {
         assertReturnNullVariableToken(DEFAULT_VARIABLE + "2");
     }
 
+    @Test
+    public void shouldReturnNullVariableTokenWithDigitAndOperationAtStart(){
+        assertReturnNullVariableToken("2 + " + DEFAULT_VARIABLE);
+    }
+
     private void assertReturnEqualVariableToken(String testString, char variableName) {
         FormulaToken variableToken = checkToken(testString);
-        Assert.assertEquals("Variable token has wrong name",
+        assertEquals("Variable token has wrong name",
                 variableToken.getItem().getVariableName(), variableName);
     }
 
     private void assertVariableTokenSize(String testString) {
         FormulaToken variableToken = checkToken(testString);
-        Assert.assertEquals("Variable token has wrong size", variableToken.getTokenSize(), 1);
+        assertEquals("Variable token has wrong size", variableToken.getTokenSize(), 1);
     }
 
     private void assertReturnNullVariableToken(String testString) {
         FormulaToken variableToken = checkToken(testString);
-        Assert.assertNull("Variable token should be null for : " + testString, variableToken);
+        assertNull("Variable token should be null for : " + testString, variableToken);
     }
 }

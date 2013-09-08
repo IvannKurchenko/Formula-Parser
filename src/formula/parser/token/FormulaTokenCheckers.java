@@ -86,7 +86,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
                 return null;
             }
 
-            if(formula.length()==1 && Character.isLetter(formula.charAt(startPosition))){
+            if( (formula.length()-1) == startPosition && Character.isLetter(formula.charAt(startPosition))){
                 return newVariableToken(formula, startPosition);
             }
 

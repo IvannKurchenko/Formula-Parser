@@ -17,11 +17,11 @@ public enum FormulaValidationRules implements FormulaValidationRule {
      */
     BRACKETS_RULE("Bracket '%s' in wrong place") {
         @Override
-        public void validate(FormulaTokenizer formulaItems) throws FormulaValidationException {
+        public void validate(FormulaTokenizer formulaTokenizer) throws FormulaValidationException {
             int bracketCount = 0;
             FormulaToken lastOpenBracket = null;
 
-            for (FormulaToken formulaToken : formulaItems) {
+            for (FormulaToken formulaToken : formulaTokenizer) {
                 FormulaItem formulaItem = formulaToken.getItem();
 
                 if (formulaItem.getType() == FormulaItem.Type.OPEN_BRACKET) {
@@ -45,8 +45,8 @@ public enum FormulaValidationRules implements FormulaValidationRule {
      */
     ARGUMENTS_RULE("No operation for %s argument") {
         @Override
-        public void validate(FormulaTokenizer formulaItems) throws FormulaValidationException {
-            List<FormulaToken> tokenList = formulaItems.getTokenList();
+        public void validate(FormulaTokenizer formulaTokenizer) throws FormulaValidationException {
+            List<FormulaToken> tokenList = formulaTokenizer.getTokenList();
             for (int i = 0; i < tokenList.size() - 1; i++) {
 
                 FormulaToken firstToken = tokenList.get(i);
@@ -75,8 +75,13 @@ public enum FormulaValidationRules implements FormulaValidationRule {
      */
     BINARY_OPERATION_RULE("Binary operation '%s' have no valid arguments") {
         @Override
-        public void validate(FormulaTokenizer formulaItems) throws FormulaValidationException {
-            List<FormulaToken> tokenList = formulaItems.getTokenList();
+        public void validate(FormulaTokenizer formulaTokenizer) throws FormulaValidationException {
+            List<FormulaToken> tokenList = formulaTokenizer.getTokenList();
+
+            if (tokenList.size() < 3) {
+                ruleAssertTrue(!isBinaryOperation(tokenList, 0), getToken(tokenList, 0));
+                ruleAssertTrue(!isBinaryOperation(tokenList, 1), getToken(tokenList, 1));
+            }
 
             for (int i = 1; i < tokenList.size() - 1; i++) {
                 FormulaItem item = tokenList.get(i).getItem();
@@ -104,6 +109,13 @@ public enum FormulaValidationRules implements FormulaValidationRule {
                     token.getItem().isUnaryOperation();
         }
 
+        private boolean isBinaryOperation(List<FormulaToken> tokenList, int position){
+            return tokenList.size() > position && tokenList.get(position).getItem().isBinaryOperation();
+        }
+
+        private FormulaToken getToken(List<FormulaToken> tokenList, int pos){
+            return tokenList.size() > pos ? tokenList.get(pos) : null;
+        }
     };
 
     private String errorMessage;
