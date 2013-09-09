@@ -77,8 +77,9 @@ import static formula.parser.FormulaItem.Type.*;
     private Set<Character> variables;
 
     /*package*/ FormulaTree(FormulaTokenizer formulaTokenizer) {
-        variables = new HashSet<Character>();
-        buildTree(formulaTokenizer);
+        Set<Character> variables = new HashSet<Character>();
+        buildTree(formulaTokenizer, variables);
+        this.variables = Collections.unmodifiableSet(variables);
     }
 
     @Override
@@ -91,24 +92,24 @@ import static formula.parser.FormulaItem.Type.*;
         return checkNegativeZero(calculate(rootNode, argument));
     }
 
-    private void buildTree(FormulaTokenizer formulaTokenizer) {
+    private void buildTree(FormulaTokenizer formulaTokenizer, Set<Character> variables) {
         List<FormulaToken> tokenList = formulaTokenizer.getTokenList();
-        Node nextNode = addRoot(tokenList);
+        Node nextNode = addRoot(tokenList, variables);
         for (int i = 1; i < tokenList.size(); i++) {
-            addVariable(tokenList.get(i));
+            addVariable(tokenList.get(i), variables);
             nextNode = addNode(tokenList.get(i).getItem(), nextNode);
         }
     }
 
-    private Node addRoot(List<FormulaToken> tokenList) {
+    private Node addRoot(List<FormulaToken> tokenList, Set<Character> variables) {
         FormulaToken token = tokenList.get(0);
         rootNode = token.getItem().isBracket() ?    new BracketsNode(token.getItem(), null) :
                                                     new Node(token.getItem(), null);
-        addVariable(token);
+        addVariable(token, variables);
         return rootNode;
     }
 
-    private void addVariable(FormulaToken token) {
+    private void addVariable(FormulaToken token, Set<Character> variables) {
         if (token.getItem().getType() == FormulaItem.Type.VARIABLE) {
             variables.add(token.getItem().getVariableName());
         }

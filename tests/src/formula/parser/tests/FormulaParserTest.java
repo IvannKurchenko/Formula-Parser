@@ -80,4 +80,10 @@ public class FormulaParserTest {
     public void shouldFailParseForNull() throws FormulaParseException {
         parse(null);
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void variablesChangingShouldFail() throws FormulaParseException {
+        Formula formula = parse("x");
+        formula.variables().clear();
+    }
 }
