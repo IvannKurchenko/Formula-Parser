@@ -5,7 +5,7 @@ package formula.parser.operation;
  */
 public enum UnaryOperations implements UnaryOperation {
 
-    FACTORIAL(1, "!") {
+    FACTORIAL(2, "!") {
         @Override
         public double operate(double argument) {
             return argument > 0 ? fact(argument) : 0;
@@ -16,49 +16,49 @@ public enum UnaryOperations implements UnaryOperation {
         }
     },
 
-    LN(1, "ln") {
+    LN(2, "ln") {
         @Override
         public double operate(double argument) {
             return Math.log(argument);
         }
     },
 
-    SIN(1, "sin") {
+    SIN(2, "sin") {
         @Override
         public double operate(double argument) {
             return Math.sin(argument);
         }
     },
 
-    COS(1, "cos") {
+    COS(2, "cos") {
         @Override
         public double operate(double argument) {
             return Math.cos(argument);
         }
     },
 
-    TAN(1, "tan") {
+    TAN(2, "tan") {
         @Override
         public double operate(double argument) {
             return Math.tan(argument);
         }
     },
 
-    ARC_SIN(1, "asin", "arcsin") {
+    ARC_SIN(2, "asin", "arcsin") {
         @Override
         public double operate(double argument) {
             return Math.asin(argument);
         }
     },
 
-    ARC_COS(1, "acos", "arccos") {
+    ARC_COS(2, "acos", "arccos") {
         @Override
         public double operate(double argument) {
             return Math.acos(argument);
         }
     },
 
-    ARC_TAN(1, "atan", "arctan") {
+    ARC_TAN(2, "atan", "arctan") {
         @Override
         public double operate(double argument) {
             return Math.atan(argument);

@@ -11,12 +11,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertTrue;
+
 public class OperationsTest {
 
     @Test
     public void priorityShouldBeInRange() {
         checkPriorityInRange(BinaryOperations.values());
         checkPriorityInRange(UnaryOperations.values());
+    }
+
+    @Test
+    public void signShouldBeNotEmpty() {
+        checkEmptySigns(UnaryOperations.values());
+        checkEmptySigns(BinaryOperations.values());
+    }
+
+    @Test
+    public void signShouldDefineOneOperation() {
+        Map<String, List<Operation>> signOperationMap = new HashMap<String, List<Operation>>();
+
+        appendSignOperationMap(signOperationMap, UnaryOperations.values());
+        appendSignOperationMap(signOperationMap, BinaryOperations.values());
+
+        for (Map.Entry<String, List<Operation>> signOperation : signOperationMap.entrySet()) {
+            Assert.assertTrue(String.format("Sign %s defines more than on operation", signOperation.getKey()),
+                    signOperation.getValue().size() == 1);
+        }
+    }
+
+    @Test
+    public void unarOperationShouldHaveGreaterPriorityThenBinary(){
+        for(Operation unaryOperation :  UnaryOperations.values()){
+            for (Operation binaryOperation : BinaryOperations.values()){
+                assertTrue( String.format("Operation %s have freater priority then %s", binaryOperation, unaryOperation),
+                            unaryOperation.getPriority() > binaryOperation.getPriority() );
+            }
+        }
     }
 
     private void checkPriorityInRange(Operation[] operations) {
@@ -31,31 +62,12 @@ public class OperationsTest {
         }
     }
 
-    @Test
-    public void signShouldBeNotEmpty() {
-        checkEmptySigns(UnaryOperations.values());
-        checkEmptySigns(BinaryOperations.values());
-    }
-
     private void checkEmptySigns(Operation... operations) {
         for (Operation operation : operations) {
             for (String sign : operation.getSigns()) {
                 Assert.assertTrue(String.format("Operation %s have empty sign", operation),
                         sign != null && sign.length() > 0);
             }
-        }
-    }
-
-    @Test
-    public void signShouldDefineOneOperation() {
-        Map<String, List<Operation>> signOperationMap = new HashMap<String, List<Operation>>();
-
-        appendSignOperationMap(signOperationMap, UnaryOperations.values());
-        appendSignOperationMap(signOperationMap, BinaryOperations.values());
-
-        for (Map.Entry<String, List<Operation>> signOperation : signOperationMap.entrySet()) {
-            Assert.assertTrue(String.format("Sign %s defines more than on operation", signOperation.getKey()),
-                    signOperation.getValue().size() == 1);
         }
     }
 
