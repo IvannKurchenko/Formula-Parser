@@ -65,4 +65,14 @@ public class FormulaParserTest {
     public void shouldRightCalculateMainFormula() throws FormulaParseException {
         testFormula(FormulaCalculationTestCheckers.MAIN_FORMULA_TEST);
     }
+
+    @Test(expected = FormulaParseException.class)
+    public void shouldFailParseForEmptyString() throws FormulaParseException {
+        parse("");
+    }
+
+    @Test(expected = FormulaParseException.class)
+    public void shouldFailParseForNull() throws FormulaParseException {
+        parse(null);
+    }
 }

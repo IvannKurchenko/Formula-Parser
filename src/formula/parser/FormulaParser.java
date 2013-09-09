@@ -13,9 +13,7 @@ public class FormulaParser {
      *
      * @param formula formula in string presentation.
      * @return parsed {@link Formula} implementation.
-     * @throws FormulaParseException    in case if parse process failed.
-     * @throws NullPointerException     in case if formula string is 'null'
-     * @throws IllegalArgumentException in case if formula string is empty.
+     * @throws FormulaParseException in case if parse process failed, formula string empty or 'null'.
      */
     public static Formula parse(String formula) throws FormulaParseException {
         checkString(formula);
@@ -24,8 +22,8 @@ public class FormulaParser {
         return new FormulaTree(formulaTokenizer);
     }
 
-    private static void checkString(String formula) {
-        if (formula == null) throw new NullPointerException("Formula string is null");
-        if (formula.length() == 0) throw new IllegalArgumentException("Formula string is empty");
+    private static void checkString(String formula) throws FormulaParseException {
+        if (formula == null) throw new FormulaParseException("Formula string is null", 0);
+        if (formula.length() == 0) throw new FormulaParseException("Formula string is empty", 0);
     }
 }
