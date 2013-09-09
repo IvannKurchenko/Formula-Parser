@@ -23,25 +23,25 @@ public class FormulaParserTest {
         assertFormulaCalculationSame(expected, actual);
     }
 
-    private static void assertFormulaVariablesEquals(FormulaCalculationTestChecker expected, Formula actual){
+    private static void assertFormulaVariablesEquals(FormulaCalculationTestChecker expected, Formula actual) {
         assertEquals(expected.variables(), actual.variables());
     }
 
-    private static void assertFormulaCalculationSame(FormulaCalculationTestChecker expected, Formula actual){
+    private static void assertFormulaCalculationSame(FormulaCalculationTestChecker expected, Formula actual) {
         Set<Character> variables = expected.variables();
         Map<Character, Double> argumentsMap = newArgumentsMap(variables);
 
-        for(Character variable : variables){
-            for(double i=TEST_CALCULATION_RANGE_MIN_VALUE; i<=TEST_CALCULATION_RANGE_MAX_VALUE; i+= TEST_CALCULATION_STEP){
+        for (Character variable : variables) {
+            for (double i = TEST_CALCULATION_RANGE_MIN_VALUE; i <= TEST_CALCULATION_RANGE_MAX_VALUE; i += TEST_CALCULATION_STEP) {
                 argumentsMap.put(variable, i);
                 assertEquals("Calculation failed for : " + argumentsMap, expected.calculate(argumentsMap), actual.calculate(argumentsMap));
             }
         }
     }
 
-    private static Map<Character, Double> newArgumentsMap(Set<Character> variables){
-        Map<Character,Double> argumentsMap = new HashMap<Character, Double>(variables.size());
-        for (Character variable : variables){
+    private static Map<Character, Double> newArgumentsMap(Set<Character> variables) {
+        Map<Character, Double> argumentsMap = new HashMap<Character, Double>(variables.size());
+        for (Character variable : variables) {
             argumentsMap.put(variable, 0.0);
         }
         return argumentsMap;
