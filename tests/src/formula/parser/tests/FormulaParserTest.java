@@ -62,6 +62,11 @@ public class FormulaParserTest {
     }
 
     @Test
+    public void shouldRightCalculateInnerBracketFormula() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.INNER_BRACKET_FORMULA_TEST);
+    }
+
+    @Test
     public void shouldRightCalculateMainFormula() throws FormulaParseException {
         testFormula(FormulaCalculationTestCheckers.MAIN_FORMULA_TEST);
     }

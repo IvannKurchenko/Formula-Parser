@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static java.lang.StrictMath.sin;
+
 public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChecker{
 
     SIMPLE_FORMULA_TEST("x + y / 2 - 10 * x", 'x', 'y'){
@@ -22,6 +24,15 @@ public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChe
             double x = arguments.get('x');
             double y = arguments.get('y');
             return checkNegativeZero( (x + y) / (2 - 10) * x ) ;
+        }
+    },
+
+    INNER_BRACKET_FORMULA_TEST("((x + 3) / z + sin(2 * x) ) / (10 - z)", 'x', 'z'){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            double x = arguments.get('x');
+            double z = arguments.get('z');
+            return ((x + 3) / z + sin(2 * x) ) / (10 - z);
         }
     },
 

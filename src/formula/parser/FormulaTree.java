@@ -88,7 +88,7 @@ import static formula.parser.FormulaItem.Type.*;
 
     @Override
     public double calculate(Map<Character, Double> argument) {
-        return checkNegativeZero( calculate(rootNode, argument) );
+        return checkNegativeZero(calculate(rootNode, argument));
     }
 
     private void buildTree(FormulaTokenizer formulaTokenizer) {
@@ -351,9 +351,11 @@ import static formula.parser.FormulaItem.Type.*;
         Node parentNode = closeBracketNode.getParentNode();
         Node newOperationNode = new Node(item, parentNode);
         newOperationNode.setLeftNode(closeBracketNode);
-        if(parentNode!=null){
+        if(parentNode!=null && parentNode.getFormulaItem().isBinaryOperation()){
             parentNode.setRightNode(newOperationNode);
-        } else {
+        } else if(parentNode!=null){
+            parentNode.setLeftNode(newOperationNode);
+        } else  {
             rootNode = newOperationNode;
         }
         return newOperationNode;
@@ -414,10 +416,17 @@ import static formula.parser.FormulaItem.Type.*;
     }
 
     /*
-     * TODO  : implement and describe!
+     * Add new open bracket item to existing open bracket node.
+     * Example : ...( ( ...
+     *          ___            ___
+     * (--->   |_(_|   --->   |_(_|
+     *                   ___ /
+     *                  |_(_|
      */
-    private Node addOpenBracketToBracket(FormulaItem item, Node bracketNode) {
-        throw new UnsupportedOperationException("Not implemented yet!");
+    private Node addOpenBracketToBracket(FormulaItem item, Node openBracketNode) {
+        BracketsNode newOpenBracketNode = new BracketsNode(item, openBracketNode);
+        openBracketNode.setLeftNode(newOpenBracketNode);
+        return newOpenBracketNode;
     }
 
     /*
@@ -567,9 +576,13 @@ import static formula.parser.FormulaItem.Type.*;
             return !hasClosedBracket() ? super.getFormulaItem() : closeBracket ;
         }
 
+        void setRightNode(Node node) {
+            throw new UnsupportedOperationException(BracketsNode.class.getSimpleName() + " contains just one node");
+        }
+
         @Override
         Node getRightNode() {
-            throw new UnsupportedOperationException(BracketsNode.class.getSimpleName() + "contains just one node");
+            throw new UnsupportedOperationException(BracketsNode.class.getSimpleName() + " contains just one node");
         }
 
         @Override
