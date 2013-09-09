@@ -69,4 +69,13 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
     private void throwException(String formulaString, int offset) throws FormulaParseException {
         throw new FormulaParseException(formulaString, offset);
     }
+
+    @Override
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(FormulaToken token : this){
+            stringBuilder.append(token).append(',');
+        }
+        return stringBuilder.toString();
+    }
 }

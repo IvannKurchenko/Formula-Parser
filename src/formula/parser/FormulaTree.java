@@ -88,7 +88,7 @@ import static formula.parser.FormulaItem.Type.*;
 
     @Override
     public double calculate(Map<Character, Double> argument) {
-        return calculate(rootNode, argument);
+        return checkNegativeZero( calculate(rootNode, argument) );
     }
 
     private void buildTree(FormulaTokenizer formulaTokenizer) {
@@ -101,8 +101,10 @@ import static formula.parser.FormulaItem.Type.*;
     }
 
     private Node addRoot(List<FormulaToken> tokenList) {
-        rootNode = new Node(tokenList.get(0).getItem(), null);
-        addVariable(tokenList.get(0));
+        FormulaToken token = tokenList.get(0);
+        rootNode = token.getItem().isBracket() ?    new BracketsNode(token.getItem(), null) :
+                                                    new Node(token.getItem(), null);
+        addVariable(token);
         return rootNode;
     }
 
@@ -205,8 +207,10 @@ import static formula.parser.FormulaItem.Type.*;
                 return addOperationToOperation(item, startNode);
 
             case OPEN_BRACKET:
+                return addOperationToOpenBracket(item, startNode);
+
             case CLOSE_BRACKET:
-                return addOperationToBracket(item, startNode);
+                return addOperationToCloseBracket(item, startNode);
 
             default:
                 return rootNode;
@@ -299,10 +303,10 @@ import static formula.parser.FormulaItem.Type.*;
     }
 
     /*
-     * Add new operation item to existing bracket node.
-     * In case if bracket node already have children (left) node
+     * Add new operation item to existing open bracket node.
+     * In case if open bracket node already have children (left) node
      * new operation item add to id recursively by calling 'addNode' method,
-     * if not - add new children node to bracket.
+     * if not - add new children node to open bracket.
      * Example : ... ( !x ...
      *          ___            ___
      *  !--->  |_(_|   --->   |_(_|   ---> ....
@@ -310,16 +314,49 @@ import static formula.parser.FormulaItem.Type.*;
      *                  |_!_|
      *
      */
-    private Node addOperationToBracket(FormulaItem item, Node bracketNode) {
-        Node leftNode = bracketNode.getLeftNode();
+    private Node addOperationToOpenBracket(FormulaItem item, Node openBracketNode) {
+        Node leftNode = openBracketNode.getLeftNode();
         if (leftNode != null) {
             Node nextNode = addNode(item, leftNode);
-            return nextNode == rootNode ? bracketNode : nextNode;
+            return nextNode == rootNode ? openBracketNode : nextNode;
         } else {
-            Node bracketLeftNode = new Node(item, bracketNode);
-            bracketNode.setLeftNode(bracketLeftNode);
-            return bracketNode;
+            Node bracketLeftNode = new Node(item, openBracketNode);
+            openBracketNode.setLeftNode(bracketLeftNode);
+            return openBracketNode;
         }
+    }
+
+
+    /*
+     * Add new operation item to existing close bracket node.
+     * Because subtree inside close bracket node has greater priority then any operation
+     * new operation node should be placed over existing close bracket node, according to tree build rules.
+     * Example : ... ( x + 2 ) * ...
+     *                   ___                      ___
+     *  * --->          |_P_|       --->         |_P_|    ---> ....
+     *             ___ /                     ___/
+     *            |(_)|                     |_*_|
+     *        ___/                      ___/     \
+     *       |_+_|                     |(_)|  'next node'
+     *   ___/     \___             ___/
+     *  |_x_|     |_2_|           |_+_|
+     *                        ___/     \___
+     *                       |_x_|     |_2_|
+     *
+     *  where P - means 'parent node'.
+     *        'next node' - node where next item should be placed.
+     *
+     */
+    private Node addOperationToCloseBracket(FormulaItem item, Node closeBracketNode){
+        Node parentNode = closeBracketNode.getParentNode();
+        Node newOperationNode = new Node(item, parentNode);
+        newOperationNode.setLeftNode(closeBracketNode);
+        if(parentNode!=null){
+            parentNode.setRightNode(newOperationNode);
+        } else {
+            rootNode = newOperationNode;
+        }
+        return newOperationNode;
     }
 
     private Node addBracket(FormulaItem item, Node startNode) {
@@ -429,6 +466,10 @@ import static formula.parser.FormulaItem.Type.*;
         }
     }
 
+    private double checkNegativeZero(double value){
+        return value == -0.0 ? 0.0 : value;
+    }
+
     private double getLiteralValue(Node node) {
         return node.getFormulaItem().getDigitLiteralValue();
     }
@@ -519,6 +560,11 @@ import static formula.parser.FormulaItem.Type.*;
 
         Node getParentBracket() {
             return parentBracket;
+        }
+
+        @Override
+        FormulaItem getFormulaItem(){
+            return !hasClosedBracket() ? super.getFormulaItem() : closeBracket ;
         }
 
         @Override
