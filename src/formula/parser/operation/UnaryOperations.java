@@ -5,7 +5,7 @@ package formula.parser.operation;
  */
 public enum UnaryOperations implements UnaryOperation {
 
-    FACTORIAL(2, "!") {
+    FACTORIAL("!") {
         @Override
         public double operate(double argument) {
             return argument > 0 ? fact(argument) : 0;
@@ -16,57 +16,63 @@ public enum UnaryOperations implements UnaryOperation {
         }
     },
 
-    LN(2, "ln") {
+    LN("ln") {
         @Override
         public double operate(double argument) {
             return Math.log(argument);
         }
     },
 
-    SIN(2, "sin") {
+    SIN("sin") {
         @Override
         public double operate(double argument) {
             return Math.sin(argument);
         }
     },
 
-    COS(2, "cos") {
+    COS("cos") {
         @Override
         public double operate(double argument) {
             return Math.cos(argument);
         }
     },
 
-    TAN(2, "tan") {
+    TAN("tan") {
         @Override
         public double operate(double argument) {
             return Math.tan(argument);
         }
     },
 
-    ARC_SIN(2, "asin", "arcsin") {
+    ARC_SIN("asin", "arcsin") {
         @Override
         public double operate(double argument) {
             return Math.asin(argument);
         }
     },
 
-    ARC_COS(2, "acos", "arccos") {
+    ARC_COS("acos", "arccos") {
         @Override
         public double operate(double argument) {
             return Math.acos(argument);
         }
     },
 
-    ARC_TAN(2, "atan", "arctan") {
+    ARC_TAN("atan", "arctan") {
         @Override
         public double operate(double argument) {
             return Math.atan(argument);
         }
     };
 
+    private static final int UNARY_OPERATION_MINIMUM_PRIORITY = 2;
+
     private int priority;
     private String[] sings;
+
+    UnaryOperations(String... signs){
+        this(UNARY_OPERATION_MINIMUM_PRIORITY, signs);
+    }
 
     UnaryOperations(int priority, String... sings) {
         this.priority = priority;
