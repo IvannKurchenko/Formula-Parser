@@ -5,7 +5,7 @@ package formula.parser.operation;
  */
 public enum UnaryOperations implements UnaryOperation {
 
-    FACTORIAL("!") {
+    FACTORIAL(Notation.POSTFIX, "!") {
         @Override
         public double operate(double argument) {
             return argument > 0 ? fact(argument) : 0;
@@ -68,14 +68,20 @@ public enum UnaryOperations implements UnaryOperation {
     private static final int UNARY_OPERATION_MINIMUM_PRIORITY = 2;
 
     private int priority;
+    private Notation notation;
     private String[] sings;
 
     UnaryOperations(String... signs){
-        this(UNARY_OPERATION_MINIMUM_PRIORITY, signs);
+        this(UNARY_OPERATION_MINIMUM_PRIORITY, Notation.PREFIX, signs);
     }
 
-    UnaryOperations(int priority, String... sings) {
+    UnaryOperations(Notation notation, String... signs){
+        this(UNARY_OPERATION_MINIMUM_PRIORITY, notation, signs);
+    }
+
+    UnaryOperations(int priority, Notation notation, String... sings) {
         this.priority = priority;
+        this.notation = notation;
         this.sings = sings;
     }
 
@@ -92,5 +98,10 @@ public enum UnaryOperations implements UnaryOperation {
     @Override
     public final String[] getSigns() {
         return sings;
+    }
+
+    @Override
+    public Notation getNotation(){
+        return notation;
     }
 }
