@@ -52,6 +52,21 @@ public class FormulaParserTest {
     }
 
     @Test
+    public void shouldRightCalculateSimpleNonVariableFormula() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.SIMPLE_NON_VARIABLE_TEST);
+    }
+
+    @Test
+    public void shouldRightCalculateMinusDigitFormula() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.MINUS_FORMULA_TEST);
+    }
+
+    @Test
+    public void shouldRightCalculateFactorialFormula() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.FACTORIAL_FORMULA_TEST);
+    }
+
+    @Test
     public void shouldRightCalculateSimpleFormula() throws FormulaParseException {
         testFormula(FormulaCalculationTestCheckers.SIMPLE_FORMULA_TEST);
     }

@@ -1,5 +1,8 @@
 package formula.parser.tests;
 
+
+import formula.parser.operation.UnaryOperations;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -8,6 +11,29 @@ import java.util.Set;
 import static java.lang.StrictMath.sin;
 
 public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChecker{
+
+    SIMPLE_NON_VARIABLE_TEST("3+2*1-6/3"){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            return 6;
+        }
+    },
+
+    MINUS_FORMULA_TEST("-x+2",'x'){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            double x = arguments.get('x');
+            return 2-x;
+        }
+    },
+
+    FACTORIAL_FORMULA_TEST("5! - x",'x'){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            double x = arguments.get('x');
+            return UnaryOperations.FACTORIAL.operate(5) - x;
+        }
+    },
 
     SIMPLE_FORMULA_TEST("x + y / 2 - 10 * x", 'x', 'y'){
         @Override
