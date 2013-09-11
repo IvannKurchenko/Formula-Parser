@@ -14,6 +14,6 @@ public class FormulaValidationRuleTest {
 
     protected void checkValidation(String testString) throws FormulaParseException {
         FormulaTokenizer tokenizer = new FormulaTokenizer(testString);
-        testRule.validate(tokenizer);
+        testRule.validate(tokenizer.getTokenList());
     }
 }

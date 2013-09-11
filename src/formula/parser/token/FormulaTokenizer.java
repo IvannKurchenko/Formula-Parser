@@ -7,9 +7,9 @@ import java.util.*;
 /**
  * Parser class that split incoming formula in string presentation on list of {@link FormulaToken} elements.
  */
-public class FormulaTokenizer implements Iterable<FormulaToken> {
+public class FormulaTokenizer {
 
-    private final List<FormulaToken> itemList;
+    private final List<FormulaToken> tokenList;
 
     /**
      * Creates tokenizer related to incoming formula string.
@@ -18,7 +18,7 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
      * @throws FormulaParseException in case if unknown operation or any other element will be found.
      */
     public FormulaTokenizer(String formula) throws FormulaParseException {
-        itemList = splitOnTokens(formula);
+        tokenList = splitOnTokens(formula);
     }
 
     /**
@@ -27,12 +27,7 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
      * @return list of split tokens.
      */
     public List<FormulaToken> getTokenList() {
-        return itemList;
-    }
-
-    @Override
-    public Iterator<FormulaToken> iterator() {
-        return itemList.iterator();
+        return tokenList;
     }
 
     private List<FormulaToken> splitOnTokens(String formula) throws FormulaParseException {
@@ -73,7 +68,7 @@ public class FormulaTokenizer implements Iterable<FormulaToken> {
     @Override
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
-        for(FormulaToken token : this){
+        for(FormulaToken token : tokenList){
             stringBuilder.append(token).append(',');
         }
         return stringBuilder.toString();
