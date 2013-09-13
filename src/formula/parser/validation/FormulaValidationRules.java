@@ -107,6 +107,15 @@ public enum FormulaValidationRules implements FormulaValidationRule {
         private FormulaToken getToken(List<FormulaToken> tokenList, int pos){
             return tokenList.size() > pos ? tokenList.get(pos) : null;
         }
+    },
+
+    /**
+     *
+     */
+    UNARY_OPERATION_RULE("Binary operation '%s' have no valid arguments"){
+        @Override
+        public void validate(List<FormulaToken> formulaTokenList) throws FormulaValidationException {
+        }
     };
 
     private String errorMessage;
