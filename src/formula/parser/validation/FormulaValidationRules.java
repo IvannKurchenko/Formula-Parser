@@ -23,14 +23,13 @@ public enum FormulaValidationRules implements FormulaValidationRule {
             FormulaToken lastOpenBracket = null;
 
             for (FormulaToken formulaToken : tokenList) {
-                FormulaItem formulaItem = formulaToken.getItem();
 
-                if (formulaItem.getType() == FormulaItem.Type.OPEN_BRACKET) {
+                if (isOpenBracket(formulaToken)) {
                     lastOpenBracket = formulaToken;
                     bracketCount++;
                 }
 
-                if (formulaItem.getType() == FormulaItem.Type.CLOSE_BRACKET) {
+                if (isCloseBracket(formulaToken)) {
                     bracketCount--;
                     ruleAssertTrue(bracketCount >= 0, formulaToken);
                 }
@@ -58,14 +57,6 @@ public enum FormulaValidationRules implements FormulaValidationRule {
 
                 ruleAssertTrue( !(isCloseBracket(firstToken) && isArgument(secondToken)) , secondToken);
             }
-        }
-
-        private boolean isOpenBracket(FormulaToken token){
-            return token.getItem().getType() == FormulaItem.Type.OPEN_BRACKET;
-        }
-
-        private boolean isCloseBracket(FormulaToken token){
-            return token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET;
         }
     },
 
@@ -99,13 +90,13 @@ public enum FormulaValidationRules implements FormulaValidationRule {
 
         private boolean isValidLeftArgument(FormulaToken token) {
             return  isArgument(token) ||
-                    token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET ||
+                    isCloseBracket(token) ||
                     isPostfixUnaryOperation(token);
         }
 
         private boolean isValidRightArgument(FormulaToken token) {
             return  isArgument(token) ||
-                    token.getItem().getType() == FormulaItem.Type.OPEN_BRACKET ||
+                    isOpenBracket(token) ||
                     isPrefixUnaryOperation(token);
         }
 
@@ -115,23 +106,6 @@ public enum FormulaValidationRules implements FormulaValidationRule {
 
         private FormulaToken getToken(List<FormulaToken> tokenList, int pos){
             return tokenList.size() > pos ? tokenList.get(pos) : null;
-        }
-
-        private boolean checkUnaryOperationNotation(FormulaToken token,  UnaryOperation.Notation notation){
-            if(!token.getItem().isUnaryOperation()){
-                return false;
-            }
-
-            UnaryOperation unaryOperation = (UnaryOperation) token.getItem().getOperation();
-            return unaryOperation.getNotation() == notation;
-        }
-
-        private boolean isPostfixUnaryOperation(FormulaToken token){
-            return checkUnaryOperationNotation(token, UnaryOperation.Notation.POSTFIX);
-        }
-
-        private boolean isPrefixUnaryOperation(FormulaToken token){
-            return checkUnaryOperationNotation(token, UnaryOperation.Notation.PREFIX);
         }
     };
 
@@ -155,5 +129,30 @@ public enum FormulaValidationRules implements FormulaValidationRule {
     protected boolean isArgument(FormulaToken token){
         return  token.getItem().getType() == FormulaItem.Type.VARIABLE |
                 token.getItem().getType() == FormulaItem.Type.DIGIT;
+    }
+
+    protected boolean isOpenBracket(FormulaToken token){
+        return token.getItem().getType() == FormulaItem.Type.OPEN_BRACKET;
+    }
+
+    protected boolean isCloseBracket(FormulaToken token){
+        return token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET;
+    }
+
+    protected boolean isPostfixUnaryOperation(FormulaToken token){
+        return checkUnaryOperationNotation(token, UnaryOperation.Notation.POSTFIX);
+    }
+
+    protected boolean isPrefixUnaryOperation(FormulaToken token){
+        return checkUnaryOperationNotation(token, UnaryOperation.Notation.PREFIX);
+    }
+
+    private boolean checkUnaryOperationNotation(FormulaToken token,  UnaryOperation.Notation notation){
+        if(!token.getItem().isUnaryOperation()){
+            return false;
+        }
+
+        UnaryOperation unaryOperation = (UnaryOperation) token.getItem().getOperation();
+        return unaryOperation.getNotation() == notation;
     }
 }
