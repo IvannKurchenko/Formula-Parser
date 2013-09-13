@@ -67,6 +67,11 @@ public class FormulaParserTest {
     }
 
     @Test
+    public void shouldRightCalculateFactorialWithBracketFormula() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.FACTORIAL_BRACKET_FORMULA_TEST);
+    }
+
+    @Test
     public void shouldRightCalculateSimpleFormula() throws FormulaParseException {
         testFormula(FormulaCalculationTestCheckers.SIMPLE_FORMULA_TEST);
     }

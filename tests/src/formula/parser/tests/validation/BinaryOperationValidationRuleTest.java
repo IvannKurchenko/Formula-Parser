@@ -16,6 +16,16 @@ public class BinaryOperationValidationRuleTest extends FormulaValidationRuleTest
         checkValidation("2 + x");
     }
 
+    @Test
+    public void shouldPassValidationWithRightPrefixUnaryOperation() throws FormulaParseException {
+        checkValidation("2 + sin(2)");
+    }
+
+    @Test
+    public void shouldPassValidationWithLeftPostfixUnaryOperation() throws FormulaParseException {
+        checkValidation("x! + 2");
+    }
+
     @Test(expected = FormulaValidationException.class)
     public void shouldFailValidationThroughAbsentRightArgument() throws FormulaParseException {
         checkValidation("2 + ");
@@ -49,5 +59,15 @@ public class BinaryOperationValidationRuleTest extends FormulaValidationRuleTest
     @Test(expected = FormulaValidationException.class)
     public void shouldFailValidationThroughNoArguments() throws FormulaParseException {
         checkValidation("+");
+    }
+
+    @Test(expected = FormulaValidationException.class)
+    public void shouldFailValidationWithRightPostfixUnaryOperation() throws FormulaParseException {
+        checkValidation("2 + !5");
+    }
+
+    @Test(expected = FormulaValidationException.class)
+    public void shouldFailValidationWithLeftPrefixUnaryOperation() throws FormulaParseException {
+        checkValidation("sin + 2");
     }
 }

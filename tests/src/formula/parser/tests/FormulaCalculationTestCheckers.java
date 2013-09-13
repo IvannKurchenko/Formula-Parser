@@ -35,6 +35,14 @@ public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChe
         }
     },
 
+    FACTORIAL_BRACKET_FORMULA_TEST("(10 - 5)! - x",'x'){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            double x = arguments.get('x');
+            return UnaryOperations.FACTORIAL.operate(10 - 5) - x;
+        }
+    },
+
     SIMPLE_FORMULA_TEST("x + y / 2 - 10 * x", 'x', 'y'){
         @Override
         public double calculate(Map<Character, Double> arguments) {

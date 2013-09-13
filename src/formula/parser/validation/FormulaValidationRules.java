@@ -1,6 +1,7 @@
 package formula.parser.validation;
 
 import formula.parser.FormulaItem;
+import formula.parser.operation.UnaryOperation;
 import formula.parser.token.FormulaToken;
 import formula.parser.token.FormulaTokenizer;
 
@@ -98,13 +99,14 @@ public enum FormulaValidationRules implements FormulaValidationRule {
 
         private boolean isValidLeftArgument(FormulaToken token) {
             return  isArgument(token) ||
-                    token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET;
+                    token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET ||
+                    isPostfixUnaryOperation(token);
         }
 
         private boolean isValidRightArgument(FormulaToken token) {
             return  isArgument(token) ||
                     token.getItem().getType() == FormulaItem.Type.OPEN_BRACKET ||
-                    token.getItem().isUnaryOperation();
+                    isPrefixUnaryOperation(token);
         }
 
         private boolean isBinaryOperation(List<FormulaToken> tokenList, int position){
@@ -113,6 +115,23 @@ public enum FormulaValidationRules implements FormulaValidationRule {
 
         private FormulaToken getToken(List<FormulaToken> tokenList, int pos){
             return tokenList.size() > pos ? tokenList.get(pos) : null;
+        }
+
+        private boolean checkUnaryOperationNotation(FormulaToken token,  UnaryOperation.Notation notation){
+            if(!token.getItem().isUnaryOperation()){
+                return false;
+            }
+
+            UnaryOperation unaryOperation = (UnaryOperation) token.getItem().getOperation();
+            return unaryOperation.getNotation() == notation;
+        }
+
+        private boolean isPostfixUnaryOperation(FormulaToken token){
+            return checkUnaryOperationNotation(token, UnaryOperation.Notation.POSTFIX);
+        }
+
+        private boolean isPrefixUnaryOperation(FormulaToken token){
+            return checkUnaryOperationNotation(token, UnaryOperation.Notation.PREFIX);
         }
     };
 
