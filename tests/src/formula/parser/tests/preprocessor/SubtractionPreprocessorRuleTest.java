@@ -24,4 +24,9 @@ public class SubtractionPreprocessorRuleTest extends PreprocessorRuleTest{
     public void shouldCreateAdditionOperationBeforeCloseBracket() throws FormulaParseException {
         assertPrepossessResult("(x - 3) - 3","(x + - 3) + - 3");
     }
+
+    @Test
+    public void shouldCreateAdditionOperationBeforePostfixUnaryOperation() throws FormulaParseException {
+        assertPrepossessResult("3! - 3","3! + -3");
+    }
 }

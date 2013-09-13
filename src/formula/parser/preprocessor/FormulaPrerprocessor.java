@@ -16,5 +16,8 @@ public class FormulaPrerprocessor {
      * @param formulaTokenList list of {@link FormulaToken}, that represents split formula.
      */
      public static void prepossess(List<FormulaToken> formulaTokenList){
+         for(FormulaPreprocessorRule preprocessorRule : FormulaPreprocessorRules.values()){
+             preprocessorRule.prepossess(formulaTokenList);
+         }
      }
 }

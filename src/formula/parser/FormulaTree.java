@@ -176,8 +176,9 @@ import static formula.parser.FormulaItem.Type.*;
         }
 
         Node parentNode = operationNode.getParentNode();
-        return  parentNode != null && parentNode.getFormulaItem().isBracket() ?
-                parentNode :
+        Node nearestParentBracketNode = getNearestParentBracketNode(operationNode);
+        return  parentNode != null && nearestParentBracketNode != null?
+                getNearestParentBracketNode(operationNode) :
                 rootNode;
     }
 
@@ -437,6 +438,33 @@ import static formula.parser.FormulaItem.Type.*;
         bracketsNode.setCloseBracket(item);
         Node parentBracketNode = bracketsNode.getParentBracket();
         return parentBracketNode != null ? parentBracketNode : rootNode;
+    }
+
+
+    /*
+     * Return nearest parent bracket for given node.
+     * Example : ...( x * 2 + y! - 5 ......
+     *                       ___
+     *                      |_(_|   <--- nearest parent bracket
+     *                  ___/
+     *                 |_-_|
+     *             ___/     \___
+     *            |_+_|     |_5_|
+     *        ___/     \___
+     *       |_*_|     |_!_|
+     *   ___/     \___      \___
+     *  |_x_|     |_2_|     |_y_|   <--- start node
+     *
+     */
+    private BracketsNode getNearestParentBracketNode(Node node){
+        Node parentNode = node.getParentNode();
+        while (parentNode != null){
+            if(parentNode.getFormulaItem().isBracket()){
+                return (BracketsNode) parentNode;
+            }
+            parentNode = parentNode.getParentNode();
+        }
+        return null;
     }
 
     private double calculate(Node node, Map<Character, Double> arguments) {

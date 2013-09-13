@@ -2,6 +2,7 @@ package formula.parser.preprocessor;
 
 import formula.parser.FormulaItem;
 import formula.parser.operation.BinaryOperations;
+import formula.parser.operation.UnaryOperation;
 import formula.parser.operation.UnaryOperations;
 import formula.parser.token.FormulaToken;
 
@@ -44,7 +45,9 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
             FormulaToken previousToken = tokenList.get(checkPosition -1);
 
             return  isSubtractionOperation(currentToken) &&
-                    ( isArgument(previousToken) || isCloseBracket(previousToken) );
+                    (       isArgument(previousToken) ||
+                            isCloseBracket(previousToken) ||
+                            isPostfixUnaryOperation(previousToken) );
         }
 
         private boolean isSubtractionOperation(FormulaToken token){
@@ -60,6 +63,19 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
 
         private boolean isCloseBracket(FormulaToken token){
             return token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET;
+        }
+
+        protected boolean isPostfixUnaryOperation(FormulaToken token){
+            return checkUnaryOperationNotation(token, UnaryOperation.Notation.POSTFIX);
+        }
+
+        private boolean checkUnaryOperationNotation(FormulaToken token,  UnaryOperation.Notation notation){
+            if(!token.getItem().isUnaryOperation()){
+                return false;
+            }
+
+            UnaryOperation unaryOperation = (UnaryOperation) token.getItem().getOperation();
+            return unaryOperation.getNotation() == notation;
         }
     };
 }

@@ -1,5 +1,6 @@
 package formula.parser;
 
+import formula.parser.preprocessor.FormulaPrerprocessor;
 import formula.parser.token.FormulaToken;
 import formula.parser.token.FormulaTokenizer;
 import formula.parser.validation.FormulaValidator;
@@ -22,6 +23,7 @@ public class FormulaParser {
         checkString(formula);
         FormulaTokenizer formulaTokenizer = new FormulaTokenizer(formula);
         List<FormulaToken> tokenList = formulaTokenizer.getTokenList();
+        FormulaPrerprocessor.prepossess(tokenList);
         FormulaValidator.validate(tokenList);
         return new FormulaTree(tokenList);
     }
