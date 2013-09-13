@@ -115,6 +115,39 @@ public enum FormulaValidationRules implements FormulaValidationRule {
     UNARY_OPERATION_RULE("Binary operation '%s' have no valid arguments"){
         @Override
         public void validate(List<FormulaToken> formulaTokenList) throws FormulaValidationException {
+            for(int i=0; i<formulaTokenList.size(); i++){
+
+                FormulaToken token = formulaTokenList.get(i);
+
+                if(token.getItem().isUnaryOperation()){
+
+                    if(isPrefixUnaryOperation(token)){
+                        ruleAssertTrue(isValidPrefixArgument(formulaTokenList,i), token);
+                    }
+
+                    if(isPostfixUnaryOperation(token)){
+                        ruleAssertTrue(isValidPostfixArgument(formulaTokenList,i), token);
+                    }
+                }
+
+            }
+        }
+
+        private boolean isValidPrefixArgument(List<FormulaToken> tokenList, int operationPosition){
+            if(tokenList.size()-1 == operationPosition){
+                return false;
+            }
+
+            FormulaToken nextToken = tokenList.get(operationPosition + 1);
+            return isArgument(nextToken) || isOpenBracket(nextToken);
+        }
+
+        private boolean isValidPostfixArgument(List<FormulaToken> tokenList, int operationPosition){
+            if(operationPosition == 0){
+                return false;
+            }
+            FormulaToken previousToken = tokenList.get(operationPosition -1);
+            return isArgument(previousToken) || isCloseBracket(previousToken);
         }
     };
 

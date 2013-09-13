@@ -27,7 +27,18 @@ public class UnaryOperationValidationRuleTest extends FormulaValidationRuleTest{
     }
 
     @Test(expected = FormulaValidationException.class)
+    public void shouldFailValidationForPrefixUnaryOperationWithoutArgument() throws FormulaParseException {
+        checkValidation("1 - sin");
+    }
+
+
+    @Test(expected = FormulaValidationException.class)
     public void shouldFailValidationForPostfixUnaryOperation() throws FormulaParseException {
+        checkValidation("!x - 1");
+    }
+
+    @Test(expected = FormulaValidationException.class)
+    public void shouldFailValidationForPostfixUnaryOperationWithoutArgument() throws FormulaParseException {
         checkValidation("!x - 1");
     }
 }
