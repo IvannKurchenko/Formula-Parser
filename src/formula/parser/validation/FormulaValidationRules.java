@@ -53,6 +53,10 @@ public enum FormulaValidationRules implements FormulaValidationRule {
 
                 ruleAssertTrue( !(isArgument(firstToken) && isArgument(secondToken)) , secondToken);
 
+                ruleAssertTrue( !(isArgument(firstToken) && isPrefixUnaryOperation(secondToken)) , secondToken);
+
+                ruleAssertTrue( !(isPostfixUnaryOperation(firstToken) && isPrefixUnaryOperation(secondToken)) , secondToken);
+
                 ruleAssertTrue( !(isArgument(firstToken) && isOpenBracket(secondToken)) , secondToken);
 
                 ruleAssertTrue( !(isCloseBracket(firstToken) && isArgument(secondToken)) , secondToken);

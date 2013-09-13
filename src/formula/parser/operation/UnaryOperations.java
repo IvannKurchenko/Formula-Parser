@@ -16,6 +16,15 @@ public enum UnaryOperations implements UnaryOperation {
         }
     },
 
+
+    SUBTRACTION("-") {
+        @Override
+        public double operate(double firstArgument) {
+            return -firstArgument;
+        }
+    },
+
+
     LN("ln") {
         @Override
         public double operate(double argument) {

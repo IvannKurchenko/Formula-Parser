@@ -2,6 +2,7 @@ package formula.parser.tests.token;
 
 import formula.parser.FormulaItem;
 import formula.parser.operation.BinaryOperations;
+import formula.parser.operation.UnaryOperations;
 import formula.parser.token.FormulaToken;
 import org.junit.Test;
 
@@ -69,6 +70,6 @@ public class FormulaTokenTest {
     @Test
     public void operationTokensShouldBeNonEqual() {
         assertNotEquals(newToken(DEFAULT_OPERATION_ITEM),
-                newToken(FormulaItem.newOperationItem(BinaryOperations.SUBTRACTION), 1, 1));
+                newToken(FormulaItem.newOperationItem(UnaryOperations.SUBTRACTION), 1, 1));
     }
 }

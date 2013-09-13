@@ -35,4 +35,9 @@ public class ArgumentsValidationRuleTest extends FormulaValidationRuleTest {
     public void shouldFailValidationThoughBracketWithoutNextArgument() throws FormulaParseException {
         checkValidation("3(");
     }
+
+    @Test(expected = FormulaValidationException.class)
+    public void shouldFailValidationThoughNoOperationBetweenDigitAndPrefixUnaryOperation() throws FormulaParseException {
+        checkValidation("3sin(x)");
+    }
 }

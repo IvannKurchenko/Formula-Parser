@@ -12,13 +12,6 @@ public enum BinaryOperations implements BinaryOperation {
         }
     },
 
-    SUBTRACTION(0, "-") {
-        @Override
-        public double operate(double firstArgument, double secondArgument) {
-            return firstArgument - secondArgument;
-        }
-    },
-
     DIVISION(1, "/") {
         @Override
         public double operate(double firstArgument, double secondArgument) {

@@ -2,6 +2,7 @@ package formula.parser.tests;
 
 import formula.parser.operation.BinaryOperations;
 import formula.parser.operation.Operation;
+import formula.parser.operation.UnaryOperations;
 import org.junit.Test;
 
 import static formula.parser.FormulaItem.*;
@@ -57,7 +58,7 @@ public class FormulaItemTest {
 
     @Test
     public void operationItemsShouldBeNonEqual() {
-        assertNotEquals(newOperationItem(DEFAULT_TEST_OPERATION), newOperationItem(BinaryOperations.SUBTRACTION));
+        assertNotEquals(newOperationItem(DEFAULT_TEST_OPERATION), newOperationItem(UnaryOperations.SUBTRACTION));
     }
 
     @Test

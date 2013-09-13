@@ -26,7 +26,7 @@ public class FormulaTokenizerTest {
         addToken(newVariableItem('x'), 1, 0);
         addToken(newOperationItem(BinaryOperations.ADDITION), 1, 2);
         addToken(newDigitItem(3), 1, 4);
-        addToken(newOperationItem(BinaryOperations.SUBTRACTION), 1, 6);
+        addToken(newOperationItem(UnaryOperations.SUBTRACTION), 1, 6);
         addToken(newVariableItem('y'), 1, 8);
         addToken(newOperationItem(BinaryOperations.MULTIPLY), 1, 10);
         addToken(newBracketItem(true), 1, 12);
