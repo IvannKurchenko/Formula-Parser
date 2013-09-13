@@ -19,8 +19,13 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
      * should goes before argument.
      */
     POSTFIX_UNARY_OPERATION_PREPROCESSOR_RULE(){
+
         @Override
         public void prepossess(List<FormulaToken> formulaTokenList) {
+            for(int i = 0; i < formulaTokenList.size(); i++){
+
+            }
         }
+
     };
 }
