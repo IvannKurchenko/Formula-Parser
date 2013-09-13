@@ -48,7 +48,7 @@ public class FormulaTokenizer {
                 throwException(formula, i);
             }
         }
-        return Collections.unmodifiableList(items);
+        return items;
     }
 
     private FormulaToken nextToken(String formula, int startPosition) {
