@@ -60,5 +60,15 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
                     Arrays.equals(SUBTRACTION_SIGNS, item.getOperation().getSigns());
         }
 
+    },
+
+    /**
+     *
+     */
+    ARGUMENT_MULTIPLY_RULE(){
+        @Override
+        public void prepossess(List<FormulaToken> formulaTokenList) {
+
+        }
     };
 }
