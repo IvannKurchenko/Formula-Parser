@@ -17,7 +17,7 @@ import static formula.parser.FormulaItem.newOperationItem;
 public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
 
     /**
-     * This prepares subtraction operation for binary representation.
+     * This rule prepares subtraction operation for binary representation.
      * Because subtraction operation is unary operation in general, for binary presentation need to
      * add addition operation before.
      * Example : x - y       ----> x + -y
@@ -62,7 +62,11 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
     },
 
     /**
-     *
+     * This rule insert additional multiply operation for arguments, where they missed and
+     * can be added as default.
+     * Example : 3x     ---> 3*x
+     *           3(x+1) ---> 3*(x+1)
+     *           x(x+1) ---> x*(x+1)
      */
     ARGUMENT_MULTIPLY_RULE(){
 
