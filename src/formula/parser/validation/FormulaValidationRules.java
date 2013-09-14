@@ -1,9 +1,7 @@
 package formula.parser.validation;
 
 import formula.parser.FormulaItem;
-import formula.parser.operation.UnaryOperation;
 import formula.parser.token.FormulaToken;
-import formula.parser.token.FormulaTokenizer;
 
 import java.util.List;
 
@@ -117,7 +115,8 @@ public enum FormulaValidationRules implements FormulaValidationRule {
     },
 
     /**
-     *
+     * This rule checks that each unary operation should have it's correct argument or operation.
+     * For example : sin(x) + 1 - correct , (x)sin + 1 - incorrect
      */
     UNARY_OPERATION_RULE("Binary operation '%s' have no valid arguments"){
         @Override
