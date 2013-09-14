@@ -18,7 +18,11 @@ import static formula.parser.FormulaItem.newOperationItem;
 public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
 
     /**
-     *
+     * This prepares subtraction operation for binary representation.
+     * Because subtraction operation is unary operation in general, for binary presentation need to
+     * add addition operation before.
+     * Example : x - y       ----> x + -y
+     *           x - (y + 3) ----> x + -(y + 3)
      */
     SUBTRACTION_OPERATION_RULE(){
 
@@ -55,8 +59,6 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
             return  item.isUnaryOperation() &&
                     Arrays.equals(SUBTRACTION_SIGNS, item.getOperation().getSigns());
         }
-
-
 
     };
 }
