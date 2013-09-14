@@ -28,6 +28,13 @@ public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChe
         }
     },
 
+    TWO_MINUSES_FORMULA_TEST("7--2"){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            return 9;
+        }
+    },
+
     FACTORIAL_FORMULA_TEST("5! - x",'x'){
         @Override
         public double calculate(Map<Character, Double> arguments) {

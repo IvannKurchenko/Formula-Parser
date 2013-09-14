@@ -62,6 +62,11 @@ public class FormulaParserTest {
     }
 
     @Test
+    public void shouldRightCalculateTwoMinusesDigitFormula() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.TWO_MINUSES_FORMULA_TEST);
+    }
+
+    @Test
     public void shouldRightCalculateFactorialFormula() throws FormulaParseException {
         testFormula(FormulaCalculationTestCheckers.FACTORIAL_FORMULA_TEST);
     }

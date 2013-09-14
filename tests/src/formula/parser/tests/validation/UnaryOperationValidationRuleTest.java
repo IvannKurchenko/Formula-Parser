@@ -23,7 +23,7 @@ public class UnaryOperationValidationRuleTest extends FormulaValidationRuleTest{
 
     @Test(expected = FormulaValidationException.class)
     public void shouldFailValidationForPrefixUnaryOperation() throws FormulaParseException {
-        checkValidation("(x)sin - 1");
+        checkValidation("(x)sin + 1");
     }
 
     @Test(expected = FormulaValidationException.class)

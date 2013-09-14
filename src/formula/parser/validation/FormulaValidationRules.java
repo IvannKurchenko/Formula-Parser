@@ -145,7 +145,9 @@ public enum FormulaValidationRules implements FormulaValidationRule {
             }
 
             FormulaToken nextToken = tokenList.get(operationPosition + 1);
-            return nextToken.getItem().isArgument() || nextToken.getItem().isOpenBracket();
+            return  nextToken.getItem().isArgument() ||
+                    nextToken.getItem().isOpenBracket() ||
+                    nextToken.getItem().isPrefixUnaryOperation() ;
         }
 
         private boolean isValidPostfixArgument(List<FormulaToken> tokenList, int operationPosition){
