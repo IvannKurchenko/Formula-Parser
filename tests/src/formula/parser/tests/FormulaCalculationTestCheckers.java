@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static java.lang.StrictMath.pow;
 import static java.lang.StrictMath.sin;
 
 public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChecker{
@@ -67,6 +68,15 @@ public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChe
             double x = arguments.get('x');
             double z = arguments.get('z');
             return ((x + 3) / z + sin(2 * x) ) / (10 - z);
+        }
+    },
+
+    BRACKET_OPERATIONS_FORMULA_TEST("( x * 2 + sin(y) - 5) / (y - 10 + x * 3 ^ 2 )", 'x', 'y'){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            double x = arguments.get('x');
+            double y = arguments.get('y');
+            return ( x * 2 + sin(y) - 5) / (y - 10 + x * pow(3 , 2) );
         }
     },
 

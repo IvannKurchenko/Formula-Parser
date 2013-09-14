@@ -26,7 +26,7 @@ public enum BinaryOperations implements BinaryOperation {
         }
     },
 
-    POWER(1, "^") {
+    POWER(2, "^") {
         @Override
         public double operate(double firstArgument, double secondArgument) {
             return Math.pow(firstArgument, secondArgument);

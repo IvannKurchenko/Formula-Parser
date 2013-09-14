@@ -96,7 +96,7 @@ import static formula.parser.FormulaItem.Type.*;
         Node nextNode = addRoot(tokenList, variables);
         for (int i = 1; i < tokenList.size(); i++) {
             addVariable(tokenList.get(i), variables);
-            nextNode = addNode(tokenList.get(i).getItem(), nextNode);
+            nextNode = addItem(tokenList.get(i).getItem(), nextNode);
         }
     }
 
@@ -114,32 +114,32 @@ import static formula.parser.FormulaItem.Type.*;
         }
     }
 
-    private Node addNode(FormulaItem formulaItem, Node startNode) {
+    private Node addItem(FormulaItem formulaItem, Node startNode) {
         switch (formulaItem.getType()){
             case VARIABLE:
             case DIGIT:
-                return addArgument(formulaItem, startNode);
+                return addArgumentItem(formulaItem, startNode);
 
             case OPERATION:
-                return addOperation(formulaItem, startNode);
+                return addOperationItem(formulaItem, startNode);
 
             case OPEN_BRACKET:
             case CLOSE_BRACKET:
-                return addBracket(formulaItem, startNode);
+                return addBracketItem(formulaItem, startNode);
 
             default:
                 return rootNode;
         }
     }
 
-    private Node addArgument(FormulaItem item, Node startNode) {
+    private Node addArgumentItem(FormulaItem item, Node startNode) {
         switch (startNode.getFormulaItem().getType()){
             case OPERATION:
-                return addArgumentToOperation(item, startNode);
+                return addArgumentItemToOperationNode(item, startNode);
 
             case OPEN_BRACKET:
             case CLOSE_BRACKET:
-                return addArgumentToBracket(item, startNode);
+                return addArgumentItemToBracketNode(item, startNode);
 
             default:
                 return rootNode;
@@ -156,14 +156,14 @@ import static formula.parser.FormulaItem.Type.*;
      *   |_x_|             |_x_|      |_y_|
      *
      * For unary operations it's added to left node.
-     * Example : !x
+     * Example : -x
      *          ___            ___
-     *  x--->  |_x_|   --->   |_!_|
+     *  x--->  |_x_|   --->   |_-_|
      *                   ___ /
      *                  |_x_|
      *
      */
-    private Node addArgumentToOperation(FormulaItem item, Node operationNode) {
+    private Node addArgumentItemToOperationNode(FormulaItem item, Node operationNode) {
         Node newArgumentNode = new Node(item, operationNode);
 
         switch (operationNode.getFormulaItem().getOperation().getType()) {
@@ -176,9 +176,9 @@ import static formula.parser.FormulaItem.Type.*;
         }
 
         Node parentNode = operationNode.getParentNode();
-        Node nearestParentBracketNode = getNearestParentBracketNode(operationNode);
+        Node nearestParentBracketNode = findNearestParentBracketNode(operationNode);
         return  parentNode != null && nearestParentBracketNode != null?
-                getNearestParentBracketNode(operationNode) :
+                findNearestParentBracketNode(operationNode) :
                 rootNode;
     }
 
@@ -192,26 +192,26 @@ import static formula.parser.FormulaItem.Type.*;
      *                  |_x_|
      *
      */
-    private Node addArgumentToBracket(FormulaItem item, Node bracketNode){
+    private Node addArgumentItemToBracketNode(FormulaItem item, Node bracketNode){
         Node newArgumentNode = new Node(item, bracketNode);
         bracketNode.setLeftNode(newArgumentNode);
         return bracketNode;
     }
 
-    private Node addOperation(FormulaItem item, Node startNode) {
+    private Node addOperationItem(FormulaItem item, Node startNode) {
         switch (startNode.getFormulaItem().getType()){
             case VARIABLE:
             case DIGIT:
-                return reduceOperation(item, startNode);
+                return reduceOperationNode(item, startNode);
 
             case OPERATION:
-                return addOperationToOperation(item, startNode);
+                return addOperationItemToOperationNode(item, startNode);
 
             case OPEN_BRACKET:
-                return addOperationToOpenBracket(item, startNode);
+                return addOperationItemToOpenBracketNode(item, startNode);
 
             case CLOSE_BRACKET:
-                return addOperationToCloseBracket(item, startNode);
+                return addOperationItemToCloseBracketNode(item, startNode);
 
             default:
                 return rootNode;
@@ -223,17 +223,18 @@ import static formula.parser.FormulaItem.Type.*;
      * This operation depends on priority of items.
      *
      */
-    private Node addOperationToOperation(FormulaItem item, Node operationNode) {
+    private Node addOperationItemToOperationNode(FormulaItem item, Node operationNode) {
         int itemPriority = item.getPriority();
         int nodePriority = operationNode.getFormulaItem().getPriority();
 
         if (itemPriority > nodePriority) {
 
-            return increaseOperation(item, operationNode);
+            Node nearestPriorityNode = findNearestNodeByPriority(operationNode, itemPriority);
+            return increaseOperationNode(item, nearestPriorityNode);
 
         } else {
 
-            return reduceOperation(item, operationNode);
+            return reduceOperationNode(item, operationNode);
         }
     }
 
@@ -254,7 +255,7 @@ import static formula.parser.FormulaItem.Type.*;
      *        'next node' - node where next item should be placed.
      *
      */
-    private Node reduceOperation(FormulaItem item, Node operationNode){
+    private Node reduceOperationNode(FormulaItem item, Node operationNode){
         Node parentNode = operationNode.getParentNode();
         Node newOperationNode = new Node(item, parentNode);
         newOperationNode.setLeftNode(operationNode);
@@ -292,7 +293,7 @@ import static formula.parser.FormulaItem.Type.*;
      * where P - means 'parent node'.
      *       'next node' - node where next item should be placed.
      */
-    private Node increaseOperation(FormulaItem item, Node operationNode){
+    private Node increaseOperationNode(FormulaItem item, Node operationNode){
         Node newOperationNode = new Node(item, operationNode);
         Node nodeRightArgument = operationNode.getRightNode();
         newOperationNode.setLeftNode(nodeRightArgument);
@@ -306,7 +307,7 @@ import static formula.parser.FormulaItem.Type.*;
     /*
      * Add new operation item to existing open bracket node.
      * In case if open bracket node already have children (left) node
-     * new operation item add to id recursively by calling 'addNode' method,
+     * new operation item add to id recursively by calling 'addItem' method,
      * if not - add new children node to open bracket.
      * Example : ... ( !x ...
      *          ___            ___
@@ -315,10 +316,10 @@ import static formula.parser.FormulaItem.Type.*;
      *                  |_!_|
      *
      */
-    private Node addOperationToOpenBracket(FormulaItem item, Node openBracketNode) {
+    private Node addOperationItemToOpenBracketNode(FormulaItem item, Node openBracketNode) {
         Node leftNode = openBracketNode.getLeftNode();
         if (leftNode != null) {
-            Node nextNode = addNode(item, leftNode);
+            Node nextNode = addItem(item, leftNode);
             return nextNode == rootNode ? openBracketNode : nextNode;
         } else {
             Node bracketLeftNode = new Node(item, openBracketNode);
@@ -348,7 +349,7 @@ import static formula.parser.FormulaItem.Type.*;
      *        'next node' - node where next item should be placed.
      *
      */
-    private Node addOperationToCloseBracket(FormulaItem item, Node closeBracketNode){
+    private Node addOperationItemToCloseBracketNode(FormulaItem item, Node closeBracketNode){
         Node parentNode = closeBracketNode.getParentNode();
         Node newOperationNode = new Node(item, parentNode);
         newOperationNode.setLeftNode(closeBracketNode);
@@ -362,27 +363,27 @@ import static formula.parser.FormulaItem.Type.*;
         return newOperationNode;
     }
 
-    private Node addBracket(FormulaItem item, Node startNode) {
+    private Node addBracketItem(FormulaItem item, Node startNode) {
         switch (item.getType()){
             case OPEN_BRACKET:
-                return addOpenBracket(item, startNode);
+                return addOpenBracketItem(item, startNode);
 
             case CLOSE_BRACKET:
-                return addCloseBracket(item, startNode);
+                return addCloseBracketItemToBracketNode(item, startNode);
 
             default:
                 return rootNode;
         }
     }
 
-    private Node addOpenBracket(FormulaItem item, Node startNode) {
+    private Node addOpenBracketItem(FormulaItem item, Node startNode) {
         switch (startNode.getFormulaItem().getType()){
             case OPERATION:
-                return addOpenBracketToOperation(item, startNode);
+                return addOpenBracketItemToOperationNode(item, startNode);
 
             case OPEN_BRACKET:
             case CLOSE_BRACKET:
-                return addOpenBracketToBracket(item, startNode);
+                return addOpenBracketItemToBracketNode(item, startNode);
 
             default:
                 return startNode;
@@ -404,7 +405,7 @@ import static formula.parser.FormulaItem.Type.*;
      *  where 'next node' - node where next item should be placed.
      *
      */
-    private Node addOpenBracketToOperation(FormulaItem item, Node operationNode) {
+    private Node addOpenBracketItemToOperationNode(FormulaItem item, Node operationNode) {
         BracketsNode newBracketsNode = new BracketsNode(item, operationNode);
         switch(operationNode.getFormulaItem().getOperation().getType()){
             case UNARY:
@@ -424,7 +425,7 @@ import static formula.parser.FormulaItem.Type.*;
      *                   ___ /
      *                  |_(_|
      */
-    private Node addOpenBracketToBracket(FormulaItem item, Node openBracketNode) {
+    private Node addOpenBracketItemToBracketNode(FormulaItem item, Node openBracketNode) {
         BracketsNode newOpenBracketNode = new BracketsNode(item, openBracketNode);
         openBracketNode.setLeftNode(newOpenBracketNode);
         return newOpenBracketNode;
@@ -433,7 +434,7 @@ import static formula.parser.FormulaItem.Type.*;
     /*
      * Mark given open bracket node as closed.
      */
-    private Node addCloseBracket(FormulaItem item, Node openBracketNode) {
+    private Node addCloseBracketItemToBracketNode(FormulaItem item, Node openBracketNode) {
         BracketsNode bracketsNode = (BracketsNode) openBracketNode;
         bracketsNode.setCloseBracket(item);
         Node parentBracketNode = bracketsNode.getParentBracket();
@@ -445,7 +446,7 @@ import static formula.parser.FormulaItem.Type.*;
      * Return nearest parent bracket for given node.
      * Example : ...( x * 2 + y! - 5 ......
      *                       ___
-     *                      |_(_|   <--- nearest parent bracket
+     *                      |_(_| <--- nearest parent bracket
      *                  ___/
      *                 |_-_|
      *             ___/     \___
@@ -453,10 +454,10 @@ import static formula.parser.FormulaItem.Type.*;
      *        ___/     \___
      *       |_*_|     |_!_|
      *   ___/     \___      \___
-     *  |_x_|     |_2_|     |_y_|   <--- start node
+     *  |_x_|     |_2_|     |_y_| <--- start node
      *
      */
-    private BracketsNode getNearestParentBracketNode(Node node){
+    private BracketsNode findNearestParentBracketNode(Node node){
         Node parentNode = node.getParentNode();
         while (parentNode != null){
             if(parentNode.getFormulaItem().isBracket()){
@@ -465,6 +466,44 @@ import static formula.parser.FormulaItem.Type.*;
             parentNode = parentNode.getParentNode();
         }
         return null;
+    }
+    /*
+     * Return nearest children node for given node with minimum difference with targetPriority.
+     * In case if priority difference for two children nodes is same - right node returned.
+     * Example : ... - y + x * 3 ^ 2 ^ ......  Need to find node with priority  for " ^ " operation :
+     *
+     *              ___
+     *             |_+_|                 <--- start node
+     *         ___/     \ ___
+     *        |_-_|      |_*_|
+     *    ___/       ___ /    \___
+     *   |_y_|      |_x_|     |_^_|      <--- result node
+     *                   ___ /     \___
+     *                  |_3_|      |_2_|
+     */
+    private Node findNearestNodeByPriority(Node startNode, int targetPriority){
+        if(startNode == null){
+            return startNode;
+        }
+
+        int startNodePriority = startNode.getFormulaItem().getPriority();
+
+        if(startNodePriority == targetPriority){
+            return startNode;
+        }
+
+        if(startNodePriority > targetPriority){
+            return null;
+        }
+
+        Node rightChildren = startNode.getRightNode();
+        Node rightSubtreeResultNode = findNearestNodeByPriority(rightChildren, targetPriority);
+
+        if(rightSubtreeResultNode != null){
+            return rightSubtreeResultNode;
+        }
+
+        return startNode;
     }
 
     private double calculate(Node node, Map<Character, Double> arguments) {

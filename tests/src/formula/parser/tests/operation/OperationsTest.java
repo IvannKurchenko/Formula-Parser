@@ -44,7 +44,7 @@ public class OperationsTest {
     public void unarOperationShouldHaveGreaterPriorityThenBinary(){
         for(Operation unaryOperation :  UnaryOperations.values()){
             for (Operation binaryOperation : BinaryOperations.values()){
-                assertTrue( String.format("Operation %s have freater priority then %s", binaryOperation, unaryOperation),
+                assertTrue( String.format("Operation %s have greater priority then %s", binaryOperation, unaryOperation),
                             unaryOperation.getPriority() > binaryOperation.getPriority() );
             }
         }
