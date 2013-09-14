@@ -45,9 +45,9 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
             FormulaToken previousToken = tokenList.get(checkPosition -1);
 
             return  isSubtractionOperation(currentToken) &&
-                    (       isArgument(previousToken) ||
-                            isCloseBracket(previousToken) ||
-                            isPostfixUnaryOperation(previousToken) );
+                    (       previousToken.getItem().isArgument() ||
+                            previousToken.getItem().isCloseBracket() ||
+                            previousToken.getItem().isPostfixUnaryOperation() );
         }
 
         private boolean isSubtractionOperation(FormulaToken token){
@@ -56,26 +56,7 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
                     Arrays.equals(SUBTRACTION_SIGNS, item.getOperation().getSigns());
         }
 
-        private boolean isArgument(FormulaToken token){
-            return  token.getItem().getType() == FormulaItem.Type.VARIABLE |
-                    token.getItem().getType() == FormulaItem.Type.DIGIT;
-        }
 
-        private boolean isCloseBracket(FormulaToken token){
-            return token.getItem().getType() == FormulaItem.Type.CLOSE_BRACKET;
-        }
 
-        protected boolean isPostfixUnaryOperation(FormulaToken token){
-            return checkUnaryOperationNotation(token, UnaryOperation.Notation.POSTFIX);
-        }
-
-        private boolean checkUnaryOperationNotation(FormulaToken token,  UnaryOperation.Notation notation){
-            if(!token.getItem().isUnaryOperation()){
-                return false;
-            }
-
-            UnaryOperation unaryOperation = (UnaryOperation) token.getItem().getOperation();
-            return unaryOperation.getNotation() == notation;
-        }
     };
 }

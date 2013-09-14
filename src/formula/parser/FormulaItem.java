@@ -1,6 +1,8 @@
 package formula.parser;
 
 import formula.parser.operation.Operation;
+import formula.parser.operation.UnaryOperation;
+import formula.parser.token.FormulaToken;
 
 /**
  * Class represent general structural element of formula.
@@ -212,6 +214,56 @@ public class FormulaItem {
      */
     public boolean isBracket() {
         return type == Type.OPEN_BRACKET || type == Type.CLOSE_BRACKET;
+    }
+
+    /**
+     * Checks is item type of {@link Type#OPEN_BRACKET}.
+     * @return 'true' if item is type of {@link Type#OPEN_BRACKET}, 'false' otherwise.
+     */
+    public boolean isOpenBracket(){
+        return getType() == FormulaItem.Type.OPEN_BRACKET;
+    }
+
+    /**
+     * Checks is item type of {@link Type#CLOSE_BRACKET}.
+     * @return 'true' if item is type of {@link Type#CLOSE_BRACKET}, 'false' otherwise.
+     */
+    public boolean isCloseBracket(){
+        return getType() == FormulaItem.Type.CLOSE_BRACKET;
+    }
+
+    /**
+     * Check is item type of {@link Type#DIGIT} or {@link Type#VARIABLE}
+     * @return 'true' if item is type of {@link Type#DIGIT} or {@link Type#VARIABLE}, 'false' otherwise.
+     */
+    public boolean isArgument(){
+        return  getType() == FormulaItem.Type.VARIABLE |
+                getType() == FormulaItem.Type.DIGIT;
+    }
+
+    /**
+     * Check is item is {@link UnaryOperation} with {@link UnaryOperation.Notation#POSTFIX}.
+     * @return 'true' item is {@link UnaryOperation} with {@link UnaryOperation.Notation#POSTFIX}, 'false' otherwise.
+     */
+    public boolean isPostfixUnaryOperation(){
+        return checkUnaryOperationNotation(UnaryOperation.Notation.POSTFIX);
+    }
+
+    /**
+     * Check is item is {@link UnaryOperation} with {@link UnaryOperation.Notation#PREFIX}.
+     * @return 'true' item is {@link UnaryOperation} with {@link UnaryOperation.Notation#PREFIX}, 'false' otherwise.
+     */
+    public boolean isPrefixUnaryOperation(){
+        return checkUnaryOperationNotation(UnaryOperation.Notation.PREFIX);
+    }
+
+    private boolean checkUnaryOperationNotation(UnaryOperation.Notation notation){
+        if(!isUnaryOperation()){
+            return false;
+        }
+
+        UnaryOperation unaryOperation = (UnaryOperation) getOperation();
+        return unaryOperation.getNotation() == notation;
     }
 
     /**
