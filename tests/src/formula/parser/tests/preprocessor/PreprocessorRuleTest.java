@@ -19,7 +19,7 @@ public class PreprocessorRuleTest {
         this.testFormulaPreprocessorRule = testFormulaPreprocessorRule;
     }
 
-    protected void assertPrepossessResult(String incomingFormula, String expectedFormula) throws FormulaParseException {
+    protected void assertPrepossessResultEquals(String incomingFormula, String expectedFormula) throws FormulaParseException {
         List<FormulaToken> incomingTokenList = splitOnTokens(incomingFormula);
         testFormulaPreprocessorRule.prepossess(incomingTokenList);
         List<FormulaToken> expectedTokenList = splitOnTokens(expectedFormula);

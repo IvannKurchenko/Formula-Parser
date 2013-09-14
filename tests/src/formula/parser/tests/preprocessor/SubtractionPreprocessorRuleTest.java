@@ -12,21 +12,21 @@ public class SubtractionPreprocessorRuleTest extends PreprocessorRuleTest{
 
     @Test
     public void shouldCreateAdditionOperationBeforeVariable() throws FormulaParseException {
-        assertPrepossessResult("x - 3","x + -3");
+        assertPrepossessResultEquals("x - 3", "x + -3");
     }
 
     @Test
     public void shouldCreateAdditionOperationBeforeDigit() throws FormulaParseException {
-        assertPrepossessResult("3 - 3","3 + -3");
+        assertPrepossessResultEquals("3 - 3", "3 + -3");
     }
 
     @Test
     public void shouldCreateAdditionOperationBeforeCloseBracket() throws FormulaParseException {
-        assertPrepossessResult("(x - 3) - 3","(x + - 3) + - 3");
+        assertPrepossessResultEquals("(x - 3) - 3", "(x + - 3) + - 3");
     }
 
     @Test
     public void shouldCreateAdditionOperationBeforePostfixUnaryOperation() throws FormulaParseException {
-        assertPrepossessResult("3! - 3","3! + -3");
+        assertPrepossessResultEquals("3! - 3", "3! + -3");
     }
 }

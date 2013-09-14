@@ -2,7 +2,6 @@ package formula.parser.preprocessor;
 
 import formula.parser.FormulaItem;
 import formula.parser.operation.BinaryOperations;
-import formula.parser.operation.UnaryOperation;
 import formula.parser.operation.UnaryOperations;
 import formula.parser.token.FormulaToken;
 
@@ -31,20 +30,20 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
 
         @Override
         public void prepossess(List<FormulaToken> formulaTokenList) {
-            List<Integer> additionIndexList = new ArrayList<Integer>();
+            List<Integer> additionInsertIndexList = new ArrayList<Integer>();
 
             for(int i=1; i<formulaTokenList.size(); i++){
-                if(needAddAdditionOperation(formulaTokenList, i)){
-                    additionIndexList.add(i);
+                if(needInsertAdditionOperation(formulaTokenList, i)){
+                    additionInsertIndexList.add(i);
                 }
             }
 
-            for(int i=0; i<additionIndexList.size(); i++){
-                formulaTokenList.add(additionIndexList.get(i)+i, ADDITION_TOKEN);
+            for(int i=0; i<additionInsertIndexList.size(); i++){
+                formulaTokenList.add(additionInsertIndexList.get(i)+i, ADDITION_TOKEN);
             }
         }
 
-        private boolean needAddAdditionOperation(List<FormulaToken> tokenList, int checkPosition){
+        private boolean needInsertAdditionOperation(List<FormulaToken> tokenList, int checkPosition){
             FormulaToken currentToken = tokenList.get(checkPosition);
             FormulaToken previousToken = tokenList.get(checkPosition -1);
 
@@ -66,9 +65,39 @@ public enum FormulaPreprocessorRules implements FormulaPreprocessorRule {
      *
      */
     ARGUMENT_MULTIPLY_RULE(){
+
+        private final FormulaToken MULTIPLY_TOKEN = new FormulaToken(newOperationItem(BinaryOperations.MULTIPLY),-1,-1);
+
         @Override
         public void prepossess(List<FormulaToken> formulaTokenList) {
+            List<Integer> multiplyInsertIndexList = new ArrayList<Integer>();
 
+            for(int i=0; i < (formulaTokenList.size()-1); i++){
+                if(needInsertMultiplyOperation(formulaTokenList, i)){
+                    multiplyInsertIndexList.add(i);
+                }
+            }
+
+            for(int i=0; i<multiplyInsertIndexList.size(); i++){
+                formulaTokenList.add(multiplyInsertIndexList.get(i) +i +1, MULTIPLY_TOKEN);
+            }
         }
+
+        private boolean needInsertMultiplyOperation(List<FormulaToken> tokenList, int checkPosition){
+            FormulaItem currentItem = tokenList.get(checkPosition).getItem();
+            FormulaItem nextItem = tokenList.get(checkPosition + 1).getItem();
+            switch (currentItem.getType()){
+                case DIGIT:
+                    return  nextItem.getType() == FormulaItem.Type.VARIABLE ||
+                            nextItem.getType() == FormulaItem.Type.OPEN_BRACKET;
+
+                case VARIABLE:
+                    return nextItem.getType() == FormulaItem.Type.OPEN_BRACKET;
+
+                default:
+                    return false;
+            }
+        }
+
     };
 }

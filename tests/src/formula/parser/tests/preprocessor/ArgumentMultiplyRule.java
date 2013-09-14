@@ -12,16 +12,16 @@ public class ArgumentMultiplyRule extends PreprocessorRuleTest {
 
     @Test
     public void shouldInsertMultiplyBetweenDigitAndArgument() throws FormulaParseException {
-        assertPrepossessResult("1 + 3 x - 50","1 + 3*x - 50");
+        assertPrepossessResultEquals("1 + 3x - 50", "1 + 3*x - 50");
     }
 
     @Test
     public void shouldInsertMultiplyBetweenDigitAndOpenBracket() throws FormulaParseException {
-        assertPrepossessResult("1 + 3(x -2 ) - 50","1 + 3*(x -2 ) - 50");
+        assertPrepossessResultEquals("1 + 3(x -2 ) - 50", "1 + 3*(x -2 ) - 50");
     }
 
     @Test
     public void shouldInsertMultiplyBetweenVariableAndOpenBracket() throws FormulaParseException {
-        assertPrepossessResult("1 + x(x -2 ) - 50","1 + x*(x -2 ) - 50");
+        assertPrepossessResultEquals("1 + x(x -2 ) - 50", "1 + x*(x -2 ) - 50");
     }
 }
