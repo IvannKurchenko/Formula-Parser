@@ -80,6 +80,14 @@ public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChe
         }
     },
 
+    ARGUMENT_WITHOUT_MULTIPLY_OPERATION_TEST("3x + x(x +1 ) + 3(x - 1)", 'x'){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            double x = arguments.get('x');
+            return 3*x + x*(x +1 ) + 3*(x - 1);
+        }
+    },
+
     MAIN_FORMULA_TEST("x + sin(2) + y / 2.5 - z * (10 * 5 - 2) - z * (2 + x )", 'x', 'y', 'z'){
         @Override
         public double calculate(Map<Character, Double> arguments) {

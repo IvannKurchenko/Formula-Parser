@@ -96,6 +96,11 @@ public class FormulaParserTest {
         testFormula(FormulaCalculationTestCheckers.BRACKET_OPERATIONS_FORMULA_TEST);
     }
 
+    @Test
+    public void shouldRightCalculateArgumentsWithoutMultiplyFormula() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.ARGUMENT_WITHOUT_MULTIPLY_OPERATION_TEST);
+    }
+
     @Test(expected = FormulaParseException.class)
     public void shouldFailParseForEmptyString() throws FormulaParseException {
         parse("");
