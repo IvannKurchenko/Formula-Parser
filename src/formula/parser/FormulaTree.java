@@ -75,21 +75,32 @@ import static formula.parser.FormulaItem.Type.*;
 
     private Node rootNode;
     private Set<Character> variables;
+    private Map<Character, Double> variablesValues;
 
     /*package*/ FormulaTree(List<FormulaToken> tokenList) {
         Set<Character> variables = new HashSet<Character>();
         buildTree(tokenList, variables);
         this.variables = Collections.unmodifiableSet(variables);
+        variablesValues = new HashMap<Character, Double>(variables.size());
     }
 
     @Override
-    public Set<Character> variables() {
+    public Set<Character> getVariables() {
         return variables;
     }
 
     @Override
-    public double calculate(Map<Character, Double> argument) {
-        return checkNegativeZero(calculate(rootNode, argument));
+    public Formula setVariableValue(char variableName, double variableValue) {
+        if(!variables.contains(variableName)){
+            throw new IllegalArgumentException("Variable is absent in formula : " + variableName);
+        }
+        variablesValues.put(variableName, variableValue);
+        return this;
+    }
+
+    @Override
+    public double calculate() {
+        return checkNegativeZero(calculate(rootNode));
     }
 
     private void buildTree(List<FormulaToken> tokenList, Set<Character> variables) {
@@ -506,37 +517,37 @@ import static formula.parser.FormulaItem.Type.*;
         return startNode;
     }
 
-    private double calculate(Node node, Map<Character, Double> arguments) {
+    private double calculate(Node node) {
         switch (node.getFormulaItem().getType()) {
 
             case OPERATION:
-                return calculateOperation(node, arguments);
+                return calculateOperation(node);
 
             case DIGIT:
                 return getLiteralValue(node);
 
             case VARIABLE:
-                return getVariableValue(node, arguments);
+                return getVariableValue(node);
 
             case OPEN_BRACKET:
             case CLOSE_BRACKET:
             default:
-                return calculate(node.getLeftNode(), arguments);
+                return calculate(node.getLeftNode());
         }
     }
 
-    private double calculateOperation(Node node, Map<Character, Double> arguments) {
+    private double calculateOperation(Node node) {
         if (node.getFormulaItem().isBinaryOperation()) {
 
             BinaryOperation binaryOperation = (BinaryOperation) node.getFormulaItem().getOperation();
-            double leftArgument = calculate(node.getLeftNode(), arguments);
-            double rightArgument = calculate(node.getRightNode(), arguments);
+            double leftArgument = calculate(node.getLeftNode());
+            double rightArgument = calculate(node.getRightNode());
             return binaryOperation.operate(leftArgument, rightArgument);
 
         } else {
 
             UnaryOperation unaryOperation = (UnaryOperation) node.getFormulaItem().getOperation();
-            double argument = calculate(node.getLeftNode(), arguments);
+            double argument = calculate(node.getLeftNode());
             return unaryOperation.operate(argument);
 
         }
@@ -550,9 +561,9 @@ import static formula.parser.FormulaItem.Type.*;
         return node.getFormulaItem().getDigitLiteralValue();
     }
 
-    private double getVariableValue(Node node, Map<Character, Double> arguments) {
+    private double getVariableValue(Node node) {
         char variableName = node.getFormulaItem().getVariableName();
-        Double value = arguments.get(variableName);
+        Double value = variablesValues.get(variableName);
         if (value == null) {
             throw new IllegalArgumentException(String.format("No mapped value for %s variable", variableName));
         }

@@ -17,7 +17,7 @@ public interface FormulaCalculationTestChecker {
 
     /**
      * @return {@link Set} of variables related to {@link #getFormulaString}.
-     * @see {@link formula.parser.Formula#variables}
+     * @see {@link formula.parser.Formula#getVariables}
      */
     public Set<Character> variables();
 

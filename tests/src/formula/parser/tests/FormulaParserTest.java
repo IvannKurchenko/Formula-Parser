@@ -24,7 +24,7 @@ public class FormulaParserTest {
     }
 
     private static void assertFormulaVariablesEquals(FormulaCalculationTestChecker expected, Formula actual) {
-        assertEquals(expected.variables(), actual.variables());
+        assertEquals(expected.variables(), actual.getVariables());
     }
 
     private static void assertFormulaCalculationSame(FormulaCalculationTestChecker expected, Formula actual) {
@@ -34,7 +34,12 @@ public class FormulaParserTest {
         for (Character variable : variables) {
             for (double i = TEST_CALCULATION_RANGE_MIN_VALUE; i <= TEST_CALCULATION_RANGE_MAX_VALUE; i += TEST_CALCULATION_STEP) {
                 argumentsMap.put(variable, i);
-                assertEquals("Calculation failed for : " + argumentsMap, expected.calculate(argumentsMap), actual.calculate(argumentsMap));
+
+                for(Map.Entry<Character, Double> variableEntry : argumentsMap.entrySet()){
+                    actual.setVariableValue(variableEntry.getKey(), variableEntry.getValue());
+                }
+
+                assertEquals("Calculation failed for : " + argumentsMap, expected.calculate(argumentsMap), actual.calculate());
             }
         }
     }
@@ -124,6 +129,6 @@ public class FormulaParserTest {
     @Test(expected = UnsupportedOperationException.class)
     public void variablesChangingShouldFail() throws FormulaParseException {
         Formula formula = parse("x");
-        formula.variables().clear();
+        formula.getVariables().clear();
     }
 }
