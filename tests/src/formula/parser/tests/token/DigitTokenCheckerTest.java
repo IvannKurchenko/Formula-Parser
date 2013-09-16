@@ -51,20 +51,4 @@ public class DigitTokenCheckerTest extends FormulaTokenCheckerTest {
     public void shouldReturnNullForDigitWithMultiplePoints() {
         assertShouldReturnNullToken("1.2.3");
     }
-
-    private void assertShouldReturnEqualValue(String testString, double testValue) {
-        FormulaToken digitToken = checkToken(testString);
-        Assert.assertTrue("Digit token has wrong item value", testValue == digitToken.getItem().getDigitLiteralValue());
-    }
-
-
-    private void assertShouldReturnTokenWithCorrectSize(String testString, int requiredTokenSize) {
-        FormulaToken digitToken = checkToken(testString);
-        Assert.assertEquals("Digit token has wrong size", digitToken.getTokenSize(), requiredTokenSize);
-    }
-
-    private void assertShouldReturnNullToken(String testString) {
-        FormulaToken digitToken = checkToken(testString);
-        Assert.assertNull("Digit token should be null for non digit string", digitToken);
-    }
 }

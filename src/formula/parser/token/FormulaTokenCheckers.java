@@ -1,6 +1,7 @@
 package formula.parser.token;
 
 import formula.parser.FormulaItem;
+import formula.parser.constants.ConstantResolver;
 import formula.parser.operation.Operation;
 import formula.parser.operation.OperationResolver;
 
@@ -44,6 +45,35 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
 
         private boolean isPoint(char character){
             return character == '.';
+        }
+    },
+
+    /**
+     * Check is next {@link FormulaItem} is constant in formula string.
+     */
+    CONSTANT_CHECKER(){
+        @Override
+        public FormulaToken checkToken(String formula, int startPosition) {
+            int endPosition = startPosition;
+            while (isInBound(formula, startPosition, endPosition)) {
+
+                String operationString = formula.substring(startPosition, endPosition + 1);
+                Double value = ConstantResolver.findConstantBySign(operationString);
+                if (value != null) {
+                    FormulaItem operationItem = FormulaItem.newDigitItem(value);
+                    int tokenSize = endPosition - startPosition + 1;
+                    return new FormulaToken(operationItem, tokenSize, startPosition);
+                } else {
+                    endPosition++;
+                }
+
+            }
+            return null;
+        }
+
+        private boolean isInBound(String formula, int startPosition, int endPosition) {
+            return endPosition < formula.length() &&
+                    (startPosition - endPosition) <= ConstantResolver.getConstantMaxLength();
         }
     },
 

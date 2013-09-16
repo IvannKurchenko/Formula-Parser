@@ -3,6 +3,7 @@ package formula.parser.tests.token;
 import formula.parser.FormulaItem;
 import formula.parser.token.FormulaToken;
 import formula.parser.token.FormulaTokenCheckers;
+import junit.framework.Assert;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -34,5 +35,21 @@ public class FormulaTokenCheckerTest {
         FormulaToken formulaToken = testTokenChecker.checkToken(testString, pos);
         assertTokenSize(formulaToken);
         return formulaToken;
+    }
+
+    protected void assertShouldReturnEqualValue(String testString, double testValue) {
+        FormulaToken digitToken = checkToken(testString);
+        Assert.assertTrue("Token has wrong item value for : " + testString, testValue == digitToken.getItem().getDigitLiteralValue());
+    }
+
+
+    protected void assertShouldReturnTokenWithCorrectSize(String testString, int requiredTokenSize) {
+        FormulaToken digitToken = checkToken(testString);
+        Assert.assertEquals("Token has wrong size for : " + testString, digitToken.getTokenSize(), requiredTokenSize);
+    }
+
+    protected void assertShouldReturnNullToken(String testString) {
+        FormulaToken digitToken = checkToken(testString);
+        Assert.assertNull("Token should be null for : " + testString, digitToken);
     }
 }

@@ -16,7 +16,6 @@ public enum UnaryOperations implements UnaryOperation {
         }
     },
 
-
     SUBTRACTION("-") {
         @Override
         public double operate(double firstArgument) {
@@ -24,11 +23,17 @@ public enum UnaryOperations implements UnaryOperation {
         }
     },
 
-
     LN("ln") {
         @Override
         public double operate(double argument) {
             return Math.log(argument);
+        }
+    },
+
+    LG("lg") {
+        @Override
+        public double operate(double argument) {
+            return Math.log10(argument);
         }
     },
 
