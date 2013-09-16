@@ -106,6 +106,11 @@ public class FormulaParserTest {
         testFormula(FormulaCalculationTestCheckers.ARGUMENT_WITHOUT_MULTIPLY_OPERATION_TEST);
     }
 
+    @Test
+    public void shouldRightCalculateFormulaWithConstants() throws FormulaParseException {
+        testFormula(FormulaCalculationTestCheckers.FORMULA_WITH_CONSTANTS);
+    }
+
     @Test(expected = FormulaParseException.class)
     public void shouldFailParseForEmptyString() throws FormulaParseException {
         parse("");

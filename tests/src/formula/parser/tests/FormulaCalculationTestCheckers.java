@@ -95,6 +95,13 @@ public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChe
         }
     },
 
+    FORMULA_WITH_CONSTANTS("10 * pi - e/5"){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            return 10 * Math.PI - Math.E/5;
+        }
+    },
+
     MAIN_FORMULA_TEST("x + sin(2) + y / 2.5 - z * (10 * 5 - 2) - z * (2 + x )", 'x', 'y', 'z'){
         @Override
         public double calculate(Map<Character, Double> arguments) {
