@@ -13,12 +13,20 @@ import static junit.framework.Assert.assertEquals;
 
 public class FormulaParserTest {
 
+    public static final String TEST_CUSTOM_CONSTANT_NAME = "CONST";
+    public static final double TEST_CUSTOM_CONSTANT_VALUE = 3;
+
+
     private static final double TEST_CALCULATION_RANGE_MIN_VALUE = -100;
     private static final double TEST_CALCULATION_RANGE_MAX_VALUE = 100;
     private static final double TEST_CALCULATION_STEP = 0.5;
 
     private static void testFormula(FormulaCalculationTestChecker expected) throws FormulaParseException {
-        Formula actual = parse(expected.getFormulaString());
+        testFormula(expected, new FormulaParser());
+    }
+
+    private static void testFormula(FormulaCalculationTestChecker expected, FormulaParser parser) throws FormulaParseException {
+        Formula actual = parser.parse(expected.getFormulaString());
         assertFormulaVariablesEquals(expected, actual);
         assertFormulaCalculationSame(expected, actual);
     }
@@ -114,6 +122,13 @@ public class FormulaParserTest {
     @Test
     public void shouldRightCalculateFormulaWithConstants() throws FormulaParseException {
         testFormula(FormulaCalculationTestCheckers.FORMULA_WITH_CONSTANTS);
+    }
+
+    @Test
+    public void shouldRightCalculateFormulaWithCustomConstants() throws FormulaParseException {
+        FormulaParser parser = new FormulaParser();
+        parser.addConstant(TEST_CUSTOM_CONSTANT_NAME, TEST_CUSTOM_CONSTANT_VALUE);
+        testFormula(FormulaCalculationTestCheckers.FORMULA_WITH_CUSTOM_CONSTANTS, parser);
     }
 
     @Test(expected = FormulaParseException.class)
