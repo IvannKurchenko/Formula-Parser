@@ -1,6 +1,9 @@
 package formula.parser.token;
 
 import formula.parser.api.FormulaParseException;
+import formula.parser.constants.ConstantResolver;
+import formula.parser.operation.OperationResolver;
+import formula.parser.token.FormulaTokenChecker.ResolversProvider;
 
 import java.util.*;
 
@@ -10,6 +13,7 @@ import java.util.*;
 public class FormulaTokenizer {
 
     private final List<FormulaToken> tokenList;
+    private final ResolversProvider resolversProvider;
 
     /**
      * Creates tokenizer related to incoming formula string.
@@ -17,7 +21,8 @@ public class FormulaTokenizer {
      * @param formula formula in string presentations.
      * @throws FormulaParseException in case if unknown operation or any other element will be found.
      */
-    public FormulaTokenizer(String formula) throws FormulaParseException {
+    public FormulaTokenizer(String formula, ConstantResolver constantResolver, OperationResolver operationResolver) throws FormulaParseException {
+        resolversProvider = new ResolverProvider(constantResolver, operationResolver);
         tokenList = splitOnTokens(formula);
     }
 
@@ -53,7 +58,7 @@ public class FormulaTokenizer {
 
     private FormulaToken nextToken(String formula, int startPosition) {
         for (FormulaTokenChecker checker : FormulaTokenCheckers.values()) {
-            FormulaToken formulaToken = checker.checkToken(formula, startPosition);
+            FormulaToken formulaToken = checker.checkToken(formula, startPosition, resolversProvider);
             if (formulaToken != null) {
                 return formulaToken;
             }
@@ -66,11 +71,32 @@ public class FormulaTokenizer {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(FormulaToken token : tokenList){
+        for (FormulaToken token : tokenList) {
             stringBuilder.append(token).append(',');
         }
         return stringBuilder.toString();
+    }
+
+    private static class ResolverProvider implements ResolversProvider {
+
+        private final ConstantResolver constantResolver;
+        private final OperationResolver operationResolver;
+
+        ResolverProvider(ConstantResolver constantResolver, OperationResolver operationResolver) {
+            this.constantResolver = constantResolver;
+            this.operationResolver = operationResolver;
+        }
+
+        @Override
+        public ConstantResolver getConstantResolver() {
+            return constantResolver;
+        }
+
+        @Override
+        public OperationResolver getOperationResolver() {
+            return operationResolver;
+        }
     }
 }

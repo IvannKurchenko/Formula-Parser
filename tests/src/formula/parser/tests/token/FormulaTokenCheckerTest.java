@@ -8,6 +8,8 @@ import junit.framework.Assert;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
+import static  formula.parser.tests.util.DefaultResolverProvider.PROVIDER;
+
 public class FormulaTokenCheckerTest {
 
     private FormulaTokenCheckers testTokenChecker;
@@ -32,7 +34,7 @@ public class FormulaTokenCheckerTest {
     }
 
     protected FormulaToken checkToken(String testString, int pos) {
-        FormulaToken formulaToken = testTokenChecker.checkToken(testString, pos);
+        FormulaToken formulaToken = testTokenChecker.checkToken(testString, pos, PROVIDER);
         assertTokenSize(formulaToken);
         return formulaToken;
     }

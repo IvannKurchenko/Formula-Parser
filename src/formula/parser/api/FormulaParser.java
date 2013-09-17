@@ -43,6 +43,7 @@ public class FormulaParser {
 
     public FormulaParser() {
         constantResolver = new ConstantResolver();
+        operationResolver = new OperationResolver();
     }
 
     /**
@@ -79,7 +80,7 @@ public class FormulaParser {
      */
     public Formula parse(String formula) throws FormulaParseException {
         checkString(formula);
-        FormulaTokenizer formulaTokenizer = new FormulaTokenizer(formula);
+        FormulaTokenizer formulaTokenizer = new FormulaTokenizer(formula, constantResolver, operationResolver);
         List<FormulaToken> tokenList = formulaTokenizer.getTokenList();
         FormulaPrerprocessor.prepossess(tokenList);
         FormulaValidator.validate(tokenList);

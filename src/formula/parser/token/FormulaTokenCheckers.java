@@ -15,7 +15,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
      */
     DIGIT_CHECKER() {
         @Override
-        public FormulaToken checkToken(String formula, int startPosition) {
+        public FormulaToken checkToken(String formula, int startPosition, ResolversProvider resolversProvider) {
             if (!Character.isDigit(formula.charAt(startPosition))) {
                 return null;
             }
@@ -26,7 +26,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
             while (endPosition < formula.length() && validDigitLiteralChar(formula.charAt(endPosition))) {
 
                 pointCount += isPoint(formula.charAt(endPosition)) ? 1 : 0;
-                if( pointCount>1 ) {
+                if (pointCount > 1) {
                     return null;
                 }
 
@@ -43,7 +43,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
             return Character.isDigit(character) || isPoint(character);
         }
 
-        private boolean isPoint(char character){
+        private boolean isPoint(char character) {
             return character == '.';
         }
     },
@@ -51,14 +51,15 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
     /**
      * Check is next {@link FormulaItem} is constant in formula string.
      */
-    CONSTANT_CHECKER(){
+    CONSTANT_CHECKER() {
         @Override
-        public FormulaToken checkToken(String formula, int startPosition) {
+        public FormulaToken checkToken(String formula, int startPosition,ResolversProvider resolversProvider) {
             int endPosition = startPosition;
-            while (isInBound(formula, startPosition, endPosition)) {
+            ConstantResolver constantResolver = resolversProvider.getConstantResolver();
+            while (isInBound(formula, startPosition, endPosition, constantResolver)) {
 
                 String operationString = formula.substring(startPosition, endPosition + 1);
-                Double value = ConstantResolver.findConstantBySign(operationString);
+                Double value = constantResolver.findConstantBySign(operationString);
                 if (value != null) {
                     FormulaItem operationItem = FormulaItem.newDigitItem(value);
                     int tokenSize = endPosition - startPosition + 1;
@@ -71,9 +72,9 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
             return null;
         }
 
-        private boolean isInBound(String formula, int startPosition, int endPosition) {
+        private boolean isInBound(String formula, int startPosition, int endPosition, ConstantResolver constantResolver) {
             return endPosition < formula.length() &&
-                    (startPosition - endPosition) <= ConstantResolver.getConstantMaxLength();
+                    (startPosition - endPosition) <= constantResolver.getConstantsMaxLength();
         }
     },
 
@@ -82,8 +83,9 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
      */
     OPERATION_CHECKER() {
         @Override
-        public FormulaToken checkToken(String formula, int startPosition) {
+        public FormulaToken checkToken(String formula, int startPosition, ResolversProvider resolversProvider) {
             int endPosition = startPosition;
+            OperationResolver operationResolver = resolversProvider.getOperationResolver();
             while (isInBound(formula, startPosition, endPosition)) {
 
                 String operationString = formula.substring(startPosition, endPosition + 1);
@@ -111,12 +113,12 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
      */
     VARIABLE_CHECKER() {
         @Override
-        public FormulaToken checkToken(String formula, int startPosition) {
+        public FormulaToken checkToken(String formula, int startPosition, ResolversProvider resolversProvider) {
             if (!Character.isLetter(formula.charAt(startPosition))) {
                 return null;
             }
 
-            if( (formula.length()-1) == startPosition && Character.isLetter(formula.charAt(startPosition))){
+            if ((formula.length() - 1) == startPosition && Character.isLetter(formula.charAt(startPosition))) {
                 return newVariableToken(formula, startPosition);
             }
 
@@ -126,7 +128,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
             return nextCharNotLetter && nextCharNotDigit ? newVariableToken(formula, startPosition) : null;
         }
 
-        private FormulaToken newVariableToken(String formulaString, int startPosition){
+        private FormulaToken newVariableToken(String formulaString, int startPosition) {
             FormulaItem variableItem = FormulaItem.newVariableItem(formulaString.charAt(startPosition));
             return new FormulaToken(variableItem, 1, startPosition);
         }
@@ -137,7 +139,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
      */
     BRACKET_CHECKER() {
         @Override
-        public FormulaToken checkToken(String formula, int startPosition) {
+        public FormulaToken checkToken(String formula, int startPosition, ResolversProvider resolversProvider) {
             char character = formula.charAt(startPosition);
             return character == '(' || character == ')' ?
                     new FormulaToken(FormulaItem.newBracketItem(character == '('), 1, startPosition) :

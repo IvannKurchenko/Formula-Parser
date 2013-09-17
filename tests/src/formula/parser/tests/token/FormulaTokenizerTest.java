@@ -16,6 +16,9 @@ import static formula.parser.tests.util.AssetUtil.assertListEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
+import static  formula.parser.tests.util.DefaultResolverProvider.*;
+
+
 public class FormulaTokenizerTest {
 
     private static String DEFAULT_TEST_FORMULA_STRING = "x + 3 - y * ( z / 2 ) + sin(2)";
@@ -57,31 +60,39 @@ public class FormulaTokenizerTest {
 
     @Test
     public void splitShouldSucceed() throws FormulaParseException {
-        FormulaTokenizer formulaTokens = new FormulaTokenizer(DEFAULT_TEST_FORMULA_STRING);
+        FormulaTokenizer formulaTokens = newTokenizer();
         assertListNotEmpty(formulaTokens.getTokenList());
     }
 
     @Test
     public void shouldSplitOnNonNullElements() throws FormulaParseException {
-        FormulaTokenizer formulaTokens = new FormulaTokenizer(DEFAULT_TEST_FORMULA_STRING);
+        FormulaTokenizer formulaTokens = newTokenizer();
         assertListNonContainNull(formulaTokens.getTokenList());
     }
 
     @Test
     public void shouldSplitOnCorrectTokens() throws FormulaParseException {
-        FormulaTokenizer formulaTokens = new FormulaTokenizer(DEFAULT_TEST_FORMULA_STRING);
+        FormulaTokenizer formulaTokens = newTokenizer();
         assertListEquals(DEFAULT_TEST_FORMULA_ITEM_LIST, formulaTokens.getTokenList());
     }
 
     @Test(expected = FormulaParseException.class)
     public void splitShouldFailThroughUnknownOperation() throws FormulaParseException {
         String testString = DEFAULT_TEST_FORMULA_STRING + " + operation";
-        new FormulaTokenizer(testString);
+        newTokenizer(testString);
     }
 
     @Test(expected = FormulaParseException.class)
     public void splitShouldFailThroughInvalidDigit() throws FormulaParseException {
         String testString = DEFAULT_TEST_FORMULA_STRING + " + 1.2.3";
-        new FormulaTokenizer(testString);
+        newTokenizer(testString);
+    }
+
+    private FormulaTokenizer newTokenizer() throws FormulaParseException {
+        return new FormulaTokenizer(DEFAULT_TEST_FORMULA_STRING, CONSTANT_RESOLVER, OPERATION_RESOLVER);
+    }
+
+    private FormulaTokenizer newTokenizer(String formulaString) throws FormulaParseException {
+        return new FormulaTokenizer(formulaString, CONSTANT_RESOLVER, OPERATION_RESOLVER);
     }
 }
