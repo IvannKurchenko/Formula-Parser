@@ -1,6 +1,6 @@
 package formula.parser.token;
 
-import formula.parser.FormulaItem;
+import formula.parser.tree.FormulaItem;
 
 /**
  * Structure element of formula in string presentation.

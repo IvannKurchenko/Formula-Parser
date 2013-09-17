@@ -1,5 +1,6 @@
-package formula.parser;
+package formula.parser.tree;
 
+import formula.parser.api.Formula;
 import formula.parser.operation.BinaryOperation;
 import formula.parser.operation.UnaryOperation;
 import formula.parser.token.FormulaToken;
@@ -7,11 +8,11 @@ import formula.parser.token.FormulaTokenizer;
 
 import java.util.*;
 
-import static formula.parser.FormulaItem.Type.*;
+import static formula.parser.tree.FormulaItem.Type.*;
 
 /**
  * <H1>General</H1>
- * Implementation of {@link Formula} interface based on presentation of formula as a tree structure.
+ * Implementation of {@link formula.parser.api.Formula} interface based on presentation of formula as a tree structure.
  * Each node of tree contains as a value {@link FormulaItem} and from 0 to 2 children node's
  * that depends on type of {@link FormulaItem.Type}, it's next :
  *
@@ -71,13 +72,13 @@ import static formula.parser.FormulaItem.Type.*;
  *
  * where R - mean 'root node'
  */
-/*package*/ class FormulaTree implements Formula {
+public class FormulaTree implements Formula {
 
     private Node rootNode;
     private Set<Character> variables;
     private Map<Character, Double> variablesValues;
 
-    /*package*/ FormulaTree(List<FormulaToken> tokenList) {
+    public FormulaTree(List<FormulaToken> tokenList) {
         Set<Character> variables = new HashSet<Character>();
         buildTree(tokenList, variables);
         this.variables = Collections.unmodifiableSet(variables);

@@ -1,6 +1,6 @@
 package formula.parser.validation;
 
-import formula.parser.FormulaParseException;
+import formula.parser.api.FormulaParseException;
 
 /**
  * Specific type of {@link FormulaParseException}, signal that a formula in string presentation

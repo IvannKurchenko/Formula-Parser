@@ -1,8 +1,8 @@
 package formula.parser.tests;
 
-import formula.parser.Formula;
-import formula.parser.FormulaParseException;
-import formula.parser.FormulaParser;
+import formula.parser.api.Formula;
+import formula.parser.api.FormulaParseException;
+import formula.parser.api.FormulaParser;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public class FormulaParserTest {
     }
 
     private static Formula parse(String testString) throws FormulaParseException {
-        return FormulaParser.parse(testString);
+        return new FormulaParser().parse(testString);
     }
 
     @Test

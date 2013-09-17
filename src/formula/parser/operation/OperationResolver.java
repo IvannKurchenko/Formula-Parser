@@ -12,7 +12,6 @@ public class OperationResolver {
     private static final Map<String, UnaryOperation> UNARY_OPERATIONS = new HashMap<String, UnaryOperation>();
 
     private static int MAX_OPERATION_NAME_LENGTH;
-    private static int MAX_OPERATION_PRIORITY;
 
     static {
         fillOperationMap(BINARY_OPERATIONS, BinaryOperations.values());
@@ -28,9 +27,6 @@ public class OperationResolver {
                 MAX_OPERATION_NAME_LENGTH = sign.length() > MAX_OPERATION_NAME_LENGTH ?
                         sign.length() : MAX_OPERATION_NAME_LENGTH;
             }
-
-            MAX_OPERATION_PRIORITY = operation.getPriority() > MAX_OPERATION_PRIORITY ?
-                    operation.getPriority() : MAX_OPERATION_PRIORITY;
         }
     }
 
@@ -41,15 +37,6 @@ public class OperationResolver {
      */
     public static int getMaxOperationSignLength() {
         return MAX_OPERATION_NAME_LENGTH;
-    }
-
-    /**
-     * Return maximum priority of declared operations.
-     *
-     * @return maximum priority of declared operations.
-     */
-    public static int getMaxOperationPriority() {
-        return MAX_OPERATION_PRIORITY;
     }
 
     /**
@@ -95,5 +82,16 @@ public class OperationResolver {
      */
     public static UnaryOperation findUnaryOperationBySign(String sign) {
         return UNARY_OPERATIONS.get(sign);
+    }
+
+    private int operationMaxLength;
+
+    public OperationResolver(){
+
+    }
+
+
+    public int getOperationMaxLength(){
+        return operationMaxLength;
     }
 }

@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  * General interface that represent expected result of calculation for testing implementation of
- * {@link formula.parser.Formula} interface.
+ * {@link formula.parser.api.Formula} interface.
  */
 public interface FormulaCalculationTestChecker {
 
@@ -17,13 +17,13 @@ public interface FormulaCalculationTestChecker {
 
     /**
      * @return {@link Set} of variables related to {@link #getFormulaString}.
-     * @see {@link formula.parser.Formula#getVariables}
+     * @see {@link formula.parser.api.Formula#getVariables}
      */
     public Set<Character> variables();
 
     /**
      * @return calculate value of formula related to {@link #getFormulaString()}
-     * @see {@link formula.parser.Formula#calculate}
+     * @see {@link formula.parser.api.Formula#calculate}
      */
     public double calculate(Map<Character, Double> arguments);
 }

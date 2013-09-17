@@ -1,7 +1,7 @@
 package formula.parser.tests.token;
 
-import formula.parser.FormulaItem;
-import formula.parser.FormulaParseException;
+import formula.parser.tree.FormulaItem;
+import formula.parser.api.FormulaParseException;
 import formula.parser.operation.BinaryOperations;
 import formula.parser.operation.UnaryOperations;
 import formula.parser.token.FormulaToken;
@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static formula.parser.FormulaItem.*;
+import static formula.parser.tree.FormulaItem.*;
 import static formula.parser.tests.util.AssetUtil.assertListEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;

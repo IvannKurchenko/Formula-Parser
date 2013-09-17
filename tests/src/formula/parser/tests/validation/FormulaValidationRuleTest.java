@@ -1,6 +1,6 @@
 package formula.parser.tests.validation;
 
-import formula.parser.FormulaParseException;
+import formula.parser.api.FormulaParseException;
 import formula.parser.token.FormulaTokenizer;
 import formula.parser.validation.FormulaValidationRule;
 

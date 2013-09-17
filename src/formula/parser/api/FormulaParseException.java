@@ -1,4 +1,4 @@
-package formula.parser;
+package formula.parser.api;
 
 import java.text.ParseException;
 

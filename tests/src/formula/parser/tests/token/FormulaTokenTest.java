@@ -1,6 +1,6 @@
 package formula.parser.tests.token;
 
-import formula.parser.FormulaItem;
+import formula.parser.tree.FormulaItem;
 import formula.parser.operation.BinaryOperations;
 import formula.parser.operation.UnaryOperations;
 import formula.parser.token.FormulaToken;

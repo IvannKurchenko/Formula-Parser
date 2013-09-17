@@ -1,6 +1,6 @@
 package formula.parser.tests.preprocessor;
 
-import formula.parser.FormulaParseException;
+import formula.parser.api.FormulaParseException;
 import formula.parser.preprocessor.FormulaPreprocessorRules;
 import org.junit.Test;
 

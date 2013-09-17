@@ -1,6 +1,6 @@
 package formula.parser.preprocessor;
 
-import formula.parser.FormulaItem;
+import formula.parser.tree.FormulaItem;
 import formula.parser.operation.BinaryOperations;
 import formula.parser.operation.UnaryOperations;
 import formula.parser.token.FormulaToken;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static formula.parser.FormulaItem.newOperationItem;
+import static formula.parser.tree.FormulaItem.newOperationItem;
 
 /**
  * Enum of specific {@link FormulaPreprocessorRule} implementations.

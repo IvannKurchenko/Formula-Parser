@@ -5,7 +5,7 @@ import formula.parser.operation.Operation;
 import formula.parser.operation.UnaryOperations;
 import org.junit.Test;
 
-import static formula.parser.FormulaItem.*;
+import static formula.parser.tree.FormulaItem.*;
 import static formula.parser.tests.util.AssetUtil.assertHashCodeEquals;
 import static formula.parser.tests.util.AssetUtil.assertNotEquals;
 import static junit.framework.Assert.assertEquals;

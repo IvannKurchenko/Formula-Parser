@@ -1,9 +1,7 @@
 package formula.parser.tests.token;
 
-import formula.parser.FormulaItem;
-import formula.parser.token.FormulaToken;
+import formula.parser.tree.FormulaItem;
 import formula.parser.token.FormulaTokenCheckers;
-import junit.framework.Assert;
 import org.junit.Test;
 
 public class DigitTokenCheckerTest extends FormulaTokenCheckerTest {

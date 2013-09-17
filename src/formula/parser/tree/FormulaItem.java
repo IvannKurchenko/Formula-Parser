@@ -1,8 +1,7 @@
-package formula.parser;
+package formula.parser.tree;
 
 import formula.parser.operation.Operation;
 import formula.parser.operation.UnaryOperation;
-import formula.parser.token.FormulaToken;
 
 /**
  * Class represent general structural element of formula.

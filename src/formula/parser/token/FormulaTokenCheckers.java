@@ -1,6 +1,6 @@
 package formula.parser.token;
 
-import formula.parser.FormulaItem;
+import formula.parser.tree.FormulaItem;
 import formula.parser.constants.ConstantResolver;
 import formula.parser.operation.Operation;
 import formula.parser.operation.OperationResolver;

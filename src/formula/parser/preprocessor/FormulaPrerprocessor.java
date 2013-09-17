@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Class for prepossessing split formula for correct {@link formula.parser.validation.FormulaValidator} checking and
- * {@link formula.parser.FormulaTree} building.
+ * {@link formula.parser.tree.FormulaTree} building.
  */
 public class FormulaPrerprocessor {
 

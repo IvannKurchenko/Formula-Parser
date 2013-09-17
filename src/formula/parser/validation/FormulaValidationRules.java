@@ -1,6 +1,6 @@
 package formula.parser.validation;
 
-import formula.parser.FormulaItem;
+import formula.parser.tree.FormulaItem;
 import formula.parser.token.FormulaToken;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package formula.parser.token;
 
-import formula.parser.FormulaParseException;
+import formula.parser.api.FormulaParseException;
 
 import java.util.*;
 
