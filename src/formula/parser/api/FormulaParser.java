@@ -35,7 +35,7 @@ public class FormulaParser {
      * @return {@link Set} if supported operations.
      */
     public static Set<Operation> getSupportedOperations() {
-        return null; //TODO : implement!
+        return OperationResolver.getSupportedOperations();
     }
 
     private ConstantResolver constantResolver;
@@ -65,9 +65,12 @@ public class FormulaParser {
      *
      * @param operation custom operation
      * @return current instance.
+     * @see AbstractOperation
+     * @see AbstractUnaryOperation
+     * @see AbstractUnaryOperation
      */
     public FormulaParser addOperation(Operation operation) {
-        //TODO : implement!
+        operationResolver.addOperation(operation);
         return this;
     }
 

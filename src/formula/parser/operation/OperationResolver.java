@@ -1,42 +1,78 @@
 package formula.parser.operation;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Util class for searching required {@link Operation} by it's sign.
  */
 public class OperationResolver {
 
-    private static final Map<String, BinaryOperation> BINARY_OPERATIONS = new HashMap<String, BinaryOperation>();
-    private static final Map<String, UnaryOperation> UNARY_OPERATIONS = new HashMap<String, UnaryOperation>();
+    private static final Set<Operation> SUPPORTED_OPERATIONS = createOperationSet(UnaryOperations.values(),
+            BinaryOperations.values());
 
-    private static int MAX_OPERATION_NAME_LENGTH;
+    private static final Map<String, BinaryOperation> BINARY_OPERATIONS = createOperationMap((BinaryOperation[])
+            BinaryOperations.values());
 
-    static {
-        fillOperationMap(BINARY_OPERATIONS, BinaryOperations.values());
-        fillOperationMap(UNARY_OPERATIONS, UnaryOperations.values());
+    private static final Map<String, UnaryOperation> UNARY_OPERATIONS = createOperationMap((UnaryOperation[])
+            UnaryOperations.values());
+
+    private static Set<Operation> createOperationSet(Operation[]... operations) {
+        Set<Operation> operationSet = new HashSet<Operation>();
+        for (Operation[] operationArray : operations) {
+            for (Operation operation : operationArray) {
+                operationSet.add(operation);
+            }
+        }
+        return Collections.unmodifiableSet(operationSet);
     }
 
-    private static <T extends Operation> void fillOperationMap(Map<String, T> operations, T[] values) {
+    private static <T extends Operation> Map<String, T> createOperationMap(T[] values) {
+        Map<String, T> operations = new HashMap<String, T>();
         for (T operation : values) {
-
             for (String sign : operation.getSigns()) {
                 operations.put(sign, operation);
-
-                MAX_OPERATION_NAME_LENGTH = sign.length() > MAX_OPERATION_NAME_LENGTH ?
-                        sign.length() : MAX_OPERATION_NAME_LENGTH;
             }
+        }
+        return Collections.unmodifiableMap(operations);
+    }
+
+    public static Set<Operation> getSupportedOperations() {
+        return SUPPORTED_OPERATIONS;
+    }
+
+    private Map<String, BinaryOperation> binaryOperations;
+    private Map<String, UnaryOperation> unaryOperations;
+    private int operationMaxLength;
+
+    public OperationResolver() {
+        binaryOperations = new HashMap<String, BinaryOperation>(BINARY_OPERATIONS);
+        unaryOperations = new HashMap<String, UnaryOperation>(UNARY_OPERATIONS);
+        operationMaxLength = -1;
+    }
+
+
+    /**
+     * Add custom {@link Operation} to known operations.
+     *
+     * @param operation custom implementation of {@link Operation} interface.
+     */
+    public void addOperation(Operation operation){
+        switch (operation.getType()){
+            case UNARY:
+                addOperation(unaryOperations, operation);
+                break;
+
+            case BINARY:
+                addOperation(binaryOperations, operation);
+                break;
         }
     }
 
-    /**
-     * Return maximum length of declared operations.
-     *
-     * @return maximum length of declared operations.
-     */
-    public static int getMaxOperationSignLength() {
-        return MAX_OPERATION_NAME_LENGTH;
+    private <T extends Operation> void addOperation(Map<String, T> operations, Operation newOperation){
+        T operation = (T) newOperation;
+        for(String sign : operation.getSigns()) {
+            operations.put(sign, operation);
+        }
     }
 
     /**
@@ -49,7 +85,7 @@ public class OperationResolver {
      * @see OperationResolver#findUnaryOperationBySign(String)
      * @see Operation
      */
-    public static Operation findOperationBySign(String sign) {
+    public Operation findOperationBySign(String sign) {
         Operation unaryOperation = findUnaryOperationBySign(sign);
         return unaryOperation != null ? unaryOperation : findBinaryOperationBySign(sign);
     }
@@ -65,8 +101,8 @@ public class OperationResolver {
      * @see BinaryOperation
      * @see BinaryOperations
      */
-    public static BinaryOperation findBinaryOperationBySign(String sign) {
-        return BINARY_OPERATIONS.get(sign);
+    public BinaryOperation findBinaryOperationBySign(String sign) {
+        return binaryOperations.get(sign);
     }
 
     /**
@@ -80,18 +116,28 @@ public class OperationResolver {
      * @see UnaryOperation
      * @see UnaryOperations
      */
-    public static UnaryOperation findUnaryOperationBySign(String sign) {
-        return UNARY_OPERATIONS.get(sign);
+    public UnaryOperation findUnaryOperationBySign(String sign) {
+        return unaryOperations.get(sign);
     }
 
-    private int operationMaxLength;
-
-    public OperationResolver(){
-
-    }
-
-
-    public int getOperationMaxLength(){
+    /**
+     * Return maximum length of declared operations.
+     *
+     * @return maximum length of declared operations.
+     */
+    public int getOperationMaxLength() {
+        if (operationMaxLength < 0) {
+            findOperationsMaxLength(unaryOperations);
+            findOperationsMaxLength(binaryOperations);
+        }
         return operationMaxLength;
+    }
+
+    private void findOperationsMaxLength(Map<String, ? extends Operation> operations) {
+        for (Operation operation : operations.values()) {
+            for (String sign : operation.getSigns()) {
+                operationMaxLength = sign.length() > operationMaxLength ? sign.length() : operationMaxLength;
+            }
+        }
     }
 }

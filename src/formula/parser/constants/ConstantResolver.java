@@ -9,9 +9,9 @@ import java.util.Map;
  */
 public class ConstantResolver {
 
-    private static final Map<String, Double> CONSTANTS_SIGN_VALUE_MAP = createdConstantsSignValueMap(Constants.values());
+    private static final Map<String, Double> SUPPORTED_CONSTANTS = createdConstantsSignValueMap(Constants.values());
 
-    private static final Map<String, Double> createdConstantsSignValueMap(Constant... constants) {
+    private static Map<String, Double> createdConstantsSignValueMap(Constant... constants) {
         Map<String, Double> signValueMap = new HashMap<String, Double>();
         for (Constant constant : constants) {
             for (String sign : constant.getSigns()) {
@@ -27,14 +27,14 @@ public class ConstantResolver {
      * @return map of supported constants by default, where key -sign of constant, value - constant value.
      */
     public static Map<String, Double> getSupportedConstants() {
-        return CONSTANTS_SIGN_VALUE_MAP;
+        return SUPPORTED_CONSTANTS;
     }
 
     private Map<String, Double> constantsSignValueMap;
     private int constantMaxLength;
 
     public ConstantResolver() {
-        constantsSignValueMap = new HashMap<String, Double>(CONSTANTS_SIGN_VALUE_MAP);
+        constantsSignValueMap = new HashMap<String, Double>(SUPPORTED_CONSTANTS);
     }
 
     /**

@@ -86,10 +86,10 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
         public FormulaToken checkToken(String formula, int startPosition, ResolversProvider resolversProvider) {
             int endPosition = startPosition;
             OperationResolver operationResolver = resolversProvider.getOperationResolver();
-            while (isInBound(formula, startPosition, endPosition)) {
+            while (isInBound(formula, startPosition, endPosition, operationResolver)) {
 
                 String operationString = formula.substring(startPosition, endPosition + 1);
-                Operation operation = OperationResolver.findOperationBySign(operationString);
+                Operation operation = operationResolver.findOperationBySign(operationString);
                 if (operation != null) {
                     FormulaItem operationItem = FormulaItem.newOperationItem(operation);
                     int tokenSize = endPosition - startPosition + 1;
@@ -102,9 +102,9 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
             return null;
         }
 
-        private boolean isInBound(String formula, int startPosition, int endPosition) {
+        private boolean isInBound(String formula, int startPosition, int endPosition, OperationResolver operationResolver) {
             return endPosition < formula.length() &&
-                    (startPosition - endPosition) <= OperationResolver.getMaxOperationSignLength();
+                    (startPosition - endPosition) <= operationResolver.getOperationMaxLength();
         }
     },
 

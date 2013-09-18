@@ -1,5 +1,6 @@
 package formula.parser.tests.token;
 
+import formula.parser.tests.util.DefaultResolverProvider;
 import formula.parser.tree.FormulaItem;
 import formula.parser.operation.BinaryOperations;
 import formula.parser.operation.Operation;
@@ -72,7 +73,7 @@ public class OperationTokenCheckerTest extends FormulaTokenCheckerTest {
     @Test
     public void shouldReturnNullTokenForAbsentOperation() {
         String absentOperation = "operation";
-        Assert.assertNull("Operation present", OperationResolver.findOperationBySign(absentOperation));
+        Assert.assertNull("Operation present", DefaultResolverProvider.OPERATION_RESOLVER.findOperationBySign(absentOperation));
         assertReturnNullToken(absentOperation);
     }
 
