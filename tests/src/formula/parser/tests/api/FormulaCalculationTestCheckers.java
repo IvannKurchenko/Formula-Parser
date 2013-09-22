@@ -1,7 +1,8 @@
-package formula.parser.tests;
+package formula.parser.tests.api;
 
 
 import formula.parser.operation.UnaryOperations;
+import formula.parser.tests.util.CustomTestOperations;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -106,6 +107,16 @@ public enum  FormulaCalculationTestCheckers implements FormulaCalculationTestChe
         @Override
         public double calculate(Map<Character, Double> arguments) {
             return (10 * Math.PI - Math.E/5) * FormulaParserTest.TEST_CUSTOM_CONSTANT_VALUE;
+        }
+    },
+
+
+    FORMULA_WITH_CUSTOM_OPERATIONS("exp(x) - (y mod 10)", 'x', 'y'){
+        @Override
+        public double calculate(Map<Character, Double> arguments) {
+            double x = arguments.get('x');
+            double y = arguments.get('y');
+            return CustomTestOperations.EXP_UNARY_OPERATION.operate(x) - y % 10;
         }
     },
 

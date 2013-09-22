@@ -60,7 +60,7 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
 
                 String operationString = formula.substring(startPosition, endPosition + 1);
                 Double value = constantResolver.findConstantBySign(operationString);
-                if (value != null) {
+                if (value != null && !isLetter(formula, endPosition + 2) ) {
                     FormulaItem operationItem = FormulaItem.newDigitItem(value);
                     int tokenSize = endPosition - startPosition + 1;
                     return new FormulaToken(operationItem, tokenSize, startPosition);
@@ -75,6 +75,10 @@ public enum FormulaTokenCheckers implements FormulaTokenChecker {
         private boolean isInBound(String formula, int startPosition, int endPosition, ConstantResolver constantResolver) {
             return endPosition < formula.length() &&
                     (startPosition - endPosition) <= constantResolver.getConstantsMaxLength();
+        }
+
+        private boolean isLetter(String formula, int position){
+            return position < formula.length() && Character.isLetter(formula.charAt(position));
         }
     },
 

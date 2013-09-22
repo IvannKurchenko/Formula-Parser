@@ -1,4 +1,4 @@
-package formula.parser.tests;
+package formula.parser.tests.api;
 
 import formula.parser.operation.BinaryOperations;
 import formula.parser.operation.Operation;

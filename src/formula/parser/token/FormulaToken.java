@@ -46,7 +46,7 @@ public class FormulaToken {
 
     @Override
     public String toString() {
-        return String.format("Formula formula.parser.tests.token : Item  = %s, Size = %d, Position = %d",
+        return String.format("Formula token : Item  = %s, Size = %d, Position = %d",
                 item, tokenPosition, tokenPosition);
     }
 

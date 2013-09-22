@@ -79,7 +79,7 @@ public enum UnaryOperations implements UnaryOperation {
         }
     };
 
-    private static final int UNARY_OPERATION_MINIMUM_PRIORITY = 3;
+    private static final int UNARY_OPERATION_MINIMUM_PRIORITY = 5;
 
     private int priority;
     private Notation notation;

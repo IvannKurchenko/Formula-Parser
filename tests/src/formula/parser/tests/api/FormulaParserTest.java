@@ -1,8 +1,9 @@
-package formula.parser.tests;
+package formula.parser.tests.api;
 
 import formula.parser.api.Formula;
 import formula.parser.api.FormulaParseException;
 import formula.parser.api.FormulaParser;
+import formula.parser.tests.util.CustomTestOperations;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -129,6 +130,14 @@ public class FormulaParserTest {
         FormulaParser parser = new FormulaParser();
         parser.addConstant(TEST_CUSTOM_CONSTANT_NAME, TEST_CUSTOM_CONSTANT_VALUE);
         testFormula(FormulaCalculationTestCheckers.FORMULA_WITH_CUSTOM_CONSTANTS, parser);
+    }
+
+    @Test
+    public void shouldRightCalculateFormulaWithCustomOperations() throws FormulaParseException {
+        FormulaParser parser = new FormulaParser();
+        parser.addOperation(CustomTestOperations.EXP_UNARY_OPERATION);
+        parser.addOperation(CustomTestOperations.MOD_BINARY_OPERATION);
+        testFormula(FormulaCalculationTestCheckers.FORMULA_WITH_CUSTOM_OPERATIONS, parser);
     }
 
     @Test(expected = FormulaParseException.class)
