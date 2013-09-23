@@ -110,6 +110,7 @@ public class FormulaTree implements Formula {
             addVariable(tokenList.get(i), variables);
             nextNode = addItem(tokenList.get(i).getItem(), nextNode);
         }
+        removeBrackets(rootNode);
     }
 
     private Node addRoot(List<FormulaToken> tokenList, Set<Character> variables) {
@@ -364,7 +365,10 @@ public class FormulaTree implements Formula {
     private Node addOperationItemToCloseBracketNode(FormulaItem item, Node closeBracketNode){
         Node parentNode = closeBracketNode.getParentNode();
         Node newOperationNode = new Node(item, parentNode);
+
         newOperationNode.setLeftNode(closeBracketNode);
+        closeBracketNode.setParentNode(newOperationNode);
+
         if(parentNode!=null && parentNode.getFormulaItem().isBinaryOperation()){
             parentNode.setRightNode(newOperationNode);
         } else if(parentNode!=null){
@@ -372,6 +376,7 @@ public class FormulaTree implements Formula {
         } else  {
             rootNode = newOperationNode;
         }
+
         return newOperationNode;
     }
 
@@ -518,6 +523,47 @@ public class FormulaTree implements Formula {
         return startNode;
     }
 
+
+    /*
+     * Brackets using just for operation priority increasing inside of it , after tree building it could be removed,
+     * because skip during calculation process.
+     *
+     * Example : ...(x - 2 ) * y ....
+     *                 ___                             ___
+     *                |_*_|                           |_*_|
+     *             __/     \___                   ___/     \___
+     *            |()|     |_y_|     --->        |_-_|     |_y_|
+     *        ___/                           ___/     \___
+     *       |_-_|                          |_x_|     |_2_|
+     *   ___/     \___
+     *  |_x_|     |_2_|
+     *
+     *
+     */
+    private void removeBrackets(Node startNode) {
+        if (startNode == null || startNode.isLeaf()) {
+            return;
+        }
+
+        if (startNode.getFormulaItem().isBracket()) {
+            Node parentNode = startNode.getParentNode();
+
+            if (parentNode != null) {
+
+                if (parentNode.getLeftNode().equals(startNode)) {
+                    parentNode.setLeftNode(startNode.getLeftNode());
+                } else {
+                    parentNode.setRightNode(startNode.getLeftNode());
+                }
+
+                startNode = parentNode;
+            }
+        }
+
+        removeBrackets(startNode.getLeftNode());
+        removeBrackets(startNode.getRightNode());
+    }
+
     private double calculate(Node node) {
         switch (node.getFormulaItem().getType()) {
 
@@ -530,10 +576,8 @@ public class FormulaTree implements Formula {
             case VARIABLE:
                 return getVariableValue(node);
 
-            case OPEN_BRACKET:
-            case CLOSE_BRACKET:
             default:
-                return calculate(node.getLeftNode());
+                throw new IllegalStateException("Unknown item for calculation : " + node.getFormulaItem());
         }
     }
 
