@@ -27,7 +27,7 @@ public class OperationTokenCheckerTest extends FormulaTokenCheckerTest {
 
     @Test
     public void shouldReturnTokenWithCorrectSize() {
-        assertTokenSize(DEFAULT_TEST_STRING, DEFAULT_TEST_STRING.length());
+        assertShouldReturnTokenWithCorrectSize(DEFAULT_TEST_STRING, DEFAULT_TEST_STRING.length());
     }
 
     @Test
@@ -47,12 +47,12 @@ public class OperationTokenCheckerTest extends FormulaTokenCheckerTest {
 
     @Test
     public void shouldReturnTokenWithCorrectSizeForStringWithLetterCharsInTheEnd() {
-        assertTokenSize(DEFAULT_TEST_STRING + "xyz", DEFAULT_TEST_STRING.length());
+        assertShouldReturnTokenWithCorrectSize(DEFAULT_TEST_STRING + "xyz", DEFAULT_TEST_STRING.length());
     }
 
     @Test
     public void shouldReturnTokenWithCorrectSizeForStringWithDigitCharsInTheEnd() {
-        assertTokenSize(DEFAULT_TEST_STRING + "123", DEFAULT_TEST_STRING.length());
+        assertShouldReturnTokenWithCorrectSize(DEFAULT_TEST_STRING + "123", DEFAULT_TEST_STRING.length());
     }
 
     @Test
@@ -67,25 +67,19 @@ public class OperationTokenCheckerTest extends FormulaTokenCheckerTest {
 
     @Test
     public void shouldReturnNullTokenForStringWithDigitCharAtStart() {
-        assertReturnNullToken("1" + DEFAULT_TEST_STRING);
+        assertShouldReturnNullToken("1" + DEFAULT_TEST_STRING);
+    }
+
+    @Test
+    public void shouldReturnNullTokenForUnknownOperation() {
+        assertShouldReturnNullToken(UnaryOperations.SIN + "operation");
     }
 
     @Test
     public void shouldReturnNullTokenForAbsentOperation() {
         String absentOperation = "operation";
         Assert.assertNull("Operation present", DefaultResolverProvider.OPERATION_RESOLVER.findOperationBySign(absentOperation));
-        assertReturnNullToken(absentOperation);
-    }
-
-    private void assertReturnNullToken(String testString) {
-        FormulaToken operationToken = checkToken(testString);
-        Assert.assertNull("Operation token should be null for : " + testString, operationToken);
-    }
-
-    private void assertTokenSize(String testString, int requiredTokenSize) {
-        FormulaToken operationToken = checkToken(testString);
-        Assert.assertEquals("Operation token size is wrong for : " + testString,
-                operationToken.getTokenSize(), requiredTokenSize);
+        assertShouldReturnNullToken(absentOperation);
     }
 
     private void assertReturnEqualOperation(String testString, Operation requiredOperation) {

@@ -32,5 +32,6 @@ public class ConstantTokenChecker extends FormulaTokenCheckerTest {
     @Test
     public void shouldReturnNullForUnknownConstant() {
         assertShouldReturnNullToken("const" + DEFAULT_TEST_STRING);
+        assertShouldReturnNullToken(DEFAULT_TEST_STRING + "const");
     }
 }
