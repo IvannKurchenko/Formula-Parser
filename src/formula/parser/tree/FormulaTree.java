@@ -63,12 +63,11 @@ import static formula.parser.tree.FormulaItem.Type.*;
  *  <br>                    /     \
  *  <br>                ___/       \ ___
  *  <br>               |_*_|        |_/_|
- *  <br>            __/     \___  __/    \___
- *  <br>           |()|     |_y_||_z_|   |_4_|
- *  <br>       ___/
- *  <br>      |_-_|
- *  <br>  ___/     \___
- *  <br> |_x_|     |_2_|
+ *  <br>           ___/     \___  __/    \___
+ *  <br>          |_-_|     |_y_||_z_|   |_4_|
+ *  <br>      ___/     \___
+    <br>     |_x_|     |_2_|
+ *  <br>
  *
  * where R - mean 'root node'
  */
